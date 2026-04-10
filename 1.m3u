@@ -1,6 +1,6 @@
 #EXTM3U
-#EXTINF:-1 group-title="TR",1
-https://3e8.d72577a9dd0ec47.sbs/zirve/mono.m3u8
+#EXTINF:-1 group-title="TR",11
+https://anx.d72577a9dd0ec48.sbs/zirve/mono.m3u8
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="TR",Smart Sport
 https://api.hitnova.net/s/smarts/mono.m3u8
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="TR",Smart Sport 2
