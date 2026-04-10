@@ -1,5 +1,6 @@
 #EXTM3U
-#EXTINF:-1 group-title="TR",11
+#EXTINF:-1 group-title="TR",12
+#EXTVLCOPT:http-referrer=https://inattv1290.xyz
 https://anx.d72577a9dd0ec48.sbs/zirve/mono.m3u8
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="TR",Smart Sport
 https://api.hitnova.net/s/smarts/mono.m3u8
