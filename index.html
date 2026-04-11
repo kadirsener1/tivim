@@ -923,12 +923,12 @@ function play(idx) {
       backBufferLength: 30,
 
       // 📌 Buffer ayarları – donma azaltır
-      maxBufferLength: 20,
+      maxBufferLength: 0,
       maxMaxBufferLength: 30,
-      maxBufferSize: 60 * 1000 * 1000,
+      maxBufferSize: 60,
 
-      liveSyncDurationCount: 3,
-      liveMaxLatencyDurationCount: 6,
+      liveSyncDurationCount: 1,
+      liveMaxLatencyDurationCount: 3,
 
       fragLoadingMaxRetry: 5,
       levelLoadingMaxRetry: 5,
