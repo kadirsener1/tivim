@@ -3,20 +3,63 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CANLI TV</title>
+<title>Canlı TV</title>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
-body{margin:0;background:#000;color:#fff;font-family:Arial}
-header{padding:10px;background:#111}
-.app{display:grid;grid-template-columns:280px 1fr;height:calc(100vh - 50px)}
-.sidebar{background:#111;overflow:auto}
-.main{display:flex;flex-direction:column;background:#000}
-.channel{padding:8px;border-bottom:1px solid #222;cursor:pointer}
-.channel.active{background:#333}
-#video{width:100%;background:#000;display:none}
-.player{background:#000}
-.ctrl{padding:8px;background:#111}
+body{
+  margin:0;
+  background:#000;
+  color:#fff;
+  font-family:Arial, sans-serif;
+}
+header{
+  padding:12px;
+  background:#111;
+  font-weight:bold;
+}
+.app{
+  display:grid;
+  grid-template-columns:260px 1fr;
+  height:calc(100vh - 45px);
+}
+.sidebar{
+  background:#111;
+  overflow:auto;
+}
+.channel{
+  padding:10px;
+  border-bottom:1px solid #222;
+  cursor:pointer;
+}
+.channel.active{
+  background:#333;
+}
+.main{
+  background:#000;
+  display:flex;
+  flex-direction:column;
+}
+video{
+  width:100%;
+  height:auto;
+  display:none;
+  background:#000;
+}
+.controls{
+  padding:8px;
+  background:#111;
+}
+button{
+  background:#222;
+  color:#fff;
+  border:none;
+  padding:8px 12px;
+  margin-right:6px;
+}
+button:hover{
+  background:#444;
+}
 </style>
 </head>
 
@@ -26,84 +69,96 @@ header{padding:10px;background:#111}
 
 <div class="app">
 
-<!-- SIDEBAR -->
-<aside class="sidebar" id="channelList">Yükleniyor...</aside>
+<!-- Kanal listesi -->
+<aside class="sidebar" id="channelList">
+Yükleniyor...
+</aside>
 
-<!-- MAIN -->
+<!-- Player -->
 <main class="main">
+  <video id="video" controls playsinline></video>
 
-<div class="player">
-<video id="video" controls playsinline></video>
-</div>
-
-<div class="ctrl">
-<button onclick="prevCh()">◀</button>
-<button onclick="nextCh()">▶</button>
-<button onclick="stopPlayer()">■</button>
-</div>
-
+  <div class="controls">
+    <button onclick="prevCh()">⏮ Önceki</button>
+    <button onclick="nextCh()">⏭ Sonraki</button>
+    <button onclick="stopPlayer()">⏹ Durdur</button>
+  </div>
 </main>
+
 </div>
 
 <script>
 const M3U_URL="https://raw.githubusercontent.com/kadirsener1/tivim/refs/heads/main/1.m3u";
 
-let allChannels=[],currentCh=null,hls;
+let channels=[];
+let currentIndex=null;
+let hls;
 
-/* LOAD */
-fetch(M3U_URL).then(r=>r.text()).then(t=>{
- const lines=t.split("\n");
- for(let i=0;i<lines.length;i++){
-  if(lines[i].startsWith("#EXTINF")){
-   const name=lines[i].split(",")[1]||"Kanal";
-   const url=lines[i+1]?.trim();
-   if(url?.startsWith("http")){
-     allChannels.push({name,url});
-   }
+fetch(M3U_URL)
+.then(r=>r.text())
+.then(data=>{
+  const lines=data.split("\n");
+  for(let i=0;i<lines.length;i++){
+    if(lines[i].startsWith("#EXTINF")){
+      const name=lines[i].split(",")[1]||"Kanal";
+      const url=lines[i+1]?.trim();
+      if(url && url.startsWith("http")){
+        channels.push({name,url});
+      }
+    }
   }
- }
- render();
+  renderList();
 });
 
-function render(){
- const el=document.getElementById("channelList");
- el.innerHTML=allChannels.map((c,i)=>
-  `<div class="channel" onclick="play(${i})">${c.name}</div>`
- ).join("");
+function renderList(){
+  const el=document.getElementById("channelList");
+  el.innerHTML="";
+  channels.forEach((c,i)=>{
+    el.innerHTML+=`
+      <div class="channel" onclick="play(${i})">${c.name}</div>
+    `;
+  });
 }
 
 const video=document.getElementById("video");
 
 function play(i){
- currentCh=i;
- const ch=allChannels[i];
- if(hls)hls.destroy();
- video.style.display="block";
- if(Hls.isSupported()){
-   hls=new Hls();
-   hls.loadSource(ch.url);
-   hls.attachMedia(video);
-   hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
- }else{
-   video.src=ch.url;
-   video.play();
- }
+  currentIndex=i;
+  const ch=channels[i];
+
+  if(hls)hls.destroy();
+
+  video.style.display="block";
+
+  if(Hls.isSupported()){
+    hls=new Hls();
+    hls.loadSource(ch.url);
+    hls.attachMedia(video);
+    hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
+  }else{
+    video.src=ch.url;
+    video.play();
+  }
+
+  document.querySelectorAll(".channel").forEach((e,idx)=>{
+    e.classList.toggle("active",idx===i);
+  });
 }
 
 function stopPlayer(){
- if(hls)hls.destroy();
- video.pause();
- video.style.display="none";
+  if(hls)hls.destroy();
+  video.pause();
+  video.style.display="none";
 }
 
 function nextCh(){
- if(currentCh==null)return;
- play((currentCh+1)%allChannels.length);
+  if(currentIndex===null)return;
+  play((currentIndex+1)%channels.length);
 }
 
 function prevCh(){
- if(currentCh==null)return;
- play((currentCh-1+allChannels.length)%allChannels.length);
+  if(currentIndex===null)return;
+  play((currentIndex-1+channels.length)%channels.length);
 }
 </script>
 
