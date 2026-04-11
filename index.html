@@ -1,1348 +1,400 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NOVA Player</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/hls.js/1.4.12/hls.min.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-    <style>
-    :root {
-        --bg: #080c14;
-        --surface: #0e1420;
-        --surface2: #141c2e;
-        --surface3: #1a2438;
-        --border: rgba(255, 255, 255, .07);
-        --accent: #00d4ff;
-        --accent2: #7c3aed;
-        --accent3: #f59e0b;
-        --text: #e8edf5;
-        --text2: #8899bb;
-        --text3: #4a5a7a;
-        --red: #ef4444;
-        --sidebar: 300px;
-    }
-
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
-    body {
-        font-family: 'DM Sans', sans-serif;
-        background: var(--bg);
-        color: var(--text);
-        height: 100vh;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-    }/* TOP BAR */
-
-    .topbar {
-        display: flex;
-        align-items: center;
-        gap: 14px;
-        padding: 0 18px;
-        height: 54px;
-        background: var(--surface);
-        border-bottom: 1px solid var(--border);
-        flex-shrink: 0;
-        z-index: 100;
-    }
-
-    .logo {
-        font-family: 'Syne', sans-serif;
-        font-weight: 800;
-        font-size: 20px;
-        letter-spacing: -.5px;
-        background: linear-gradient(135deg, var(--accent), var(--accent2));
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        white-space: nowrap;
-    }
-
-    .topbar-div {
-        width: 1px;
-        height: 24px;
-        background: var(--border);
-    }
-
-    .url-bar {
-        flex: 1;
-        display: flex;
-        align-items: center;
-        background: var(--surface2);
-        border: 1px solid var(--border);
-        border-radius: 10px;
-        padding: 0 12px;
-        gap: 8px;
-        transition: border-color .2s;
-    }
-
-    .url-bar:focus-within {
-        border-color: var(--accent);
-    }
-
-    .url-bar input {
-        flex: 1;
-        background: none;
-        border: none;
-        outline: none;
-        color: var(--text);
-        font-family: 'DM Sans', sans-serif;
-        font-size: 13px;
-        padding: 9px 0;
-    }
-
-    .url-bar input::placeholder {
-        color: var(--text3);
-    }
-
-    .url-label {
-        font-size: 11px;
-        color: var(--text3);
-        white-space: nowrap;
-    }
-
-    .btn {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        padding: 7px 14px;
-        border-radius: 8px;
-        border: none;
-        cursor: pointer;
-        font-family: 'DM Sans', sans-serif;
-        font-size: 13px;
-        font-weight: 500;
-        transition: all .2s;
-        white-space: nowrap;
-    }
-
-    .btn-accent {
-        background: var(--accent);
-        color: #000;
-    }
-
-    .btn-accent:hover {
-        background: #00b8e0;
-        transform: translateY(-1px);
-    }
-
-    .btn-ghost {
-        background: var(--surface3);
-        color: var(--text2);
-        border: 1px solid var(--border);
-    }
-
-    .btn-ghost:hover {
-        background: var(--surface2);
-        color: var(--text);
-    }
-
-    .btn-purple {
-        background: var(--accent2);
-        color: #fff;
-    }
-
-    .btn-purple:hover {
-        background: #6d28d9;
-    }
-
-    .toggle-sb {
-        background: none;
-        border: none;
-        color: var(--text2);
-        cursor: pointer;
-        padding: 6px;
-        border-radius: 8px;
-        transition: all .2s;
-        font-size: 17px;
-    }
-
-    .toggle-sb:hover {
-        background: var(--surface2);
-        color: var(--text);
-    }/* LAYOUT */
-
-    .main {
-        display: flex;
-        flex: 1;
-        overflow: hidden;
-    }/* SIDEBAR */
-
-    .sidebar {
-        width: var(--sidebar);
-        min-width: var(--sidebar);
-        background: var(--surface);
-        border-right: 1px solid var(--border);
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-        transition: width .3s, min-width .3s;
-    }
-
-    .sidebar.collapsed {
-        width: 0;
-        min-width: 0;
-    }
-
-    .sidebar-header {
-        padding: 13px 16px;
-        border-bottom: 1px solid var(--border);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        flex-shrink: 0;
-    }
-
-    .sidebar-title {
-        font-family: 'Syne', sans-serif;
-        font-weight: 700;
-        font-size: 12px;
-        letter-spacing: .6px;
-        text-transform: uppercase;
-        color: var(--text2);
-    }
-
-    .ch-count {
-        background: var(--accent);
-        color: #000;
-        font-size: 11px;
-        font-weight: 700;
-        padding: 2px 7px;
-        border-radius: 20px;
-    }
-
-    .cat-tabs {
-        display: flex;
-        gap: 4px;
-        padding: 10px 12px;
-        overflow-x: auto;
-        flex-shrink: 0;
-        border-bottom: 1px solid var(--border);
-        scrollbar-width: none;
-    }
-
-    .cat-tabs::-webkit-scrollbar {
-        display: none;
-    }
-
-    .cat-tab {
-        padding: 5px 12px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: 500;
-        cursor: pointer;
-        white-space: nowrap;
-        background: var(--surface2);
-        color: var(--text2);
-        border: 1px solid var(--border);
-        transition: all .2s;
-        user-select: none;
-    }
-
-    .cat-tab.active {
-        background: var(--accent);
-        color: #000;
-        border-color: var(--accent);
-    }
-
-    .cat-tab:hover:not(.active) {
-        color: var(--text);
-        border-color: rgba(255, 255, 255, .15);
-    }
-
-    .search-wrap {
-        padding: 10px 12px;
-        border-bottom: 1px solid var(--border);
-        flex-shrink: 0;
-    }
-
-    .search-input {
-        width: 100%;
-        background: var(--surface2);
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        padding: 8px 12px;
-        color: var(--text);
-        font-family: 'DM Sans', sans-serif;
-        font-size: 13px;
-        outline: none;
-        transition: border-color .2s;
-    }
-
-    .search-input:focus {
-        border-color: var(--accent);
-    }
-
-    .search-input::placeholder {
-        color: var(--text3);
-    }
-
-    .channel-list {
-        flex: 1;
-        overflow-y: auto;
-        padding: 6px 0;
-        scrollbar-width: thin;
-        scrollbar-color: var(--surface3) transparent;
-    }
-
-    .channel-list::-webkit-scrollbar {
-        width: 4px;
-    }
-
-    .channel-list::-webkit-scrollbar-thumb {
-        background: var(--surface3);
-        border-radius: 4px;
-    }
-
-    .channel-item {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 9px 14px;
-        cursor: pointer;
-        transition: background .15s;
-        border-left: 3px solid transparent;
-    }
-
-    .channel-item:hover {
-        background: var(--surface2);
-    }
-
-    .channel-item.active {
-        background: rgba(0, 212, 255, .08);
-        border-left-color: var(--accent);
-    }
-
-    .ch-logo {
-        width: 34px;
-        height: 34px;
-        border-radius: 8px;
-        background: var(--surface3);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 14px;
-        flex-shrink: 0;
-        overflow: hidden;
-    }
-
-    .ch-logo img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    .ch-info {
-        flex: 1;
-        min-width: 0;
-    }
-
-    .ch-name {
-        font-size: 13px;
-        font-weight: 500;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        color: var(--text);
-    }
-
-    .ch-meta {
-        font-size: 11px;
-        color: var(--text3);
-        margin-top: 2px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .ch-badge {
-        font-size: 10px;
-        padding: 2px 6px;
-        border-radius: 4px;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: .3px;
-        flex-shrink: 0;
-    }
-
-    .b-hls {
-        background: rgba(0, 212, 255, .15);
-        color: var(--accent);
-    }
-
-    .b-yt {
-        background: rgba(239, 68, 68, .15);
-        color: #ef4444;
-    }
-
-    .b-iframe {
-        background: rgba(124, 58, 237, .15);
-        color: var(--accent2);
-    }
-
-    .b-vlc {
-        background: rgba(245, 158, 11, .15);
-        color: var(--accent3);
-    }
-
-    .empty-state {
-        text-align: center;
-        padding: 40px 20px;
-        color: var(--text3);
-    }
-
-    .empty-icon {
-        font-size: 36px;
-        margin-bottom: 12px;
-    }
-
-    .empty-text {
-        font-size: 13px;
-        line-height: 1.6;
-    }/* PLAYER */
-
-    .player-area {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-    }
-
-    .player-wrap {
-        position: relative;
-        width: 100%;
-        padding-top: 56.25%;
-        background: #000;
-        flex-shrink: 0;
-    }
-
-    .player-inner {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-    }
-
-    #videoPlayer {
-        width: 100%;
-        height: 100%;
-        background: #000;
-        display: none;
-    }
-
-    #iframePlayer {
-        width: 100%;
-        height: 100%;
-        border: none;
-        display: none;
-    }
-
-    .placeholder {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        background: radial-gradient(ellipse at center, #0e1420 0%, #080c14 100%);
-        color: var(--text3);
-        gap: 16px;
-    }
-
-    .ph-icon {
-        font-size: 56px;
-        opacity: .25;
-    }
-
-    .ph-text {
-        font-family: 'Syne', sans-serif;
-        font-size: 15px;
-        opacity: .35;
-    }
-
-    .loading-overlay {
-        position: absolute;
-        inset: 0;
-        background: rgba(8, 12, 20, .85);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 14px;
-        z-index: 10;
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity .2s;
-    }
-
-    .loading-overlay.show {
-        opacity: 1;
-        pointer-events: all;
-    }
-
-    .spinner {
-        width: 36px;
-        height: 36px;
-        border: 3px solid rgba(255, 255, 255, .1);
-        border-top-color: var(--accent);
-        border-radius: 50%;
-        animation: spin .8s linear infinite;
-    }
-
-    .loading-text {
-        font-size: 12px;
-        color: var(--text2);
-    }
-
-    @keyframes spin {
-        to {
-            transform: rotate(360deg);
-        }
-    }/* STATUS BAR */
-
-    .player-info {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 11px 16px;
-        background: var(--surface);
-        border-bottom: 1px solid var(--border);
-        flex-shrink: 0;
-    }
-
-    .np-label {
-        font-size: 11px;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: .8px;
-        color: var(--accent);
-        white-space: nowrap;
-    }
-
-    .np-title {
-        font-size: 14px;
-        font-weight: 500;
-        color: var(--text);
-        flex: 1;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .live-badge {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        background: rgba(239, 68, 68, .15);
-        color: var(--red);
-        border: 1px solid rgba(239, 68, 68, .25);
-        border-radius: 6px;
-        padding: 3px 9px;
-        font-size: 11px;
-        font-weight: 700;
-        letter-spacing: .5px;
-    }
-
-    .live-dot {
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: var(--red);
-        animation: pulse 1.5s infinite;
-    }
-
-    @keyframes pulse {
-        0%, 100% {
-            opacity: 1;
-            transform:scale(1)
-        }
-
-        50% {
-            opacity: .5;
-            transform: scale(.8)
-        }
-    }
-
-    .stream-quality {
-        font-size: 11px;
-        color: var(--text3);
-        background: var(--surface2);
-        padding: 3px 8px;
-        border-radius: 5px;
-        border: 1px solid var(--border);
-    }
-
-    .vlc-btn {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        padding: 6px 12px;
-        background: rgba(245, 158, 11, .12);
-        border: 1px solid rgba(245, 158, 11, .25);
-        color: var(--accent3);
-        border-radius: 8px;
-        cursor: pointer;
-        font-size: 12px;
-        font-weight: 500;
-        font-family: 'DM Sans', sans-serif;
-        transition: all .2s;
-        text-decoration: none;
-    }
-
-    .vlc-btn:hover {
-        background: rgba(245, 158, 11, .2);
-    }/* INFO PANEL */
-
-    .info-panel {
-        flex: 1;
-        padding: 16px;
-        overflow-y: auto;
-        scrollbar-width: thin;
-        scrollbar-color: var(--surface3) transparent;
-    }
-
-    .info-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 12px;
-    }
-
-    .info-card {
-        background: var(--surface);
-        border: 1px solid var(--border);
-        border-radius: 12px;
-        padding: 14px;
-    }
-
-    .ic-label {
-        font-size: 11px;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: .5px;
-        color: var(--text3);
-        margin-bottom: 6px;
-    }
-
-    .ic-value {
-        font-size: 13px;
-        color: var(--text);
-        word-break: break-all;
-    }/* MODAL */
-
-    .modal-overlay {
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, .75);
-        backdrop-filter: blur(8px);
-        z-index: 1000;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity .25s;
-    }
-
-    .modal-overlay.show {
-        opacity: 1;
-        pointer-events: all;
-    }
-
-    .modal {
-        background: var(--surface);
-        border: 1px solid var(--border);
-        border-radius: 20px;
-        padding: 28px;
-        width: 480px;
-        max-width: 95vw;
-        transform: translateY(20px);
-        transition: transform .25s;
-    }
-
-    .modal-overlay.show .modal {
-        transform: translateY(0);
-    }
-
-    .modal-title {
-        font-family: 'Syne', sans-serif;
-        font-size: 18px;
-        font-weight: 700;
-        margin-bottom: 6px;
-    }
-
-    .modal-sub {
-        font-size: 13px;
-        color: var(--text2);
-        margin-bottom: 20px;
-    }
-
-    .modal-footer {
-        display: flex;
-        gap: 8px;
-        justify-content: flex-end;
-        margin-top: 16px;
-    }
-
-    .form-label {
-        font-size: 12px;
-        color: var(--text2);
-        margin-bottom: 5px;
-        display: block;
-    }
-
-    .form-row {
-        margin-bottom: 12px;
-    }
-
-    .input-full {
-        width: 100%;
-        background: var(--surface2);
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        padding: 10px 12px;
-        color: var(--text);
-        font-family: 'DM Sans', sans-serif;
-        font-size: 13px;
-        outline: none;
-        transition: border-color .2s;
-    }
-
-    .input-full:focus {
-        border-color: var(--accent);
-    }
-
-    .input-full::placeholder {
-        color: var(--text3);
-    }/* TOAST */
-
-    .toast {
-        position: fixed;
-        bottom: 24px;
-        right: 24px;
-        background: var(--surface2);
-        border: 1px solid var(--border);
-        border-radius: 12px;
-        padding: 12px 18px;
-        font-size: 13px;
-        color: var(--text);
-        z-index: 9999;
-        transform: translateY(80px);
-        opacity: 0;
-        transition: all .3s;
-        max-width: 320px;
-    }
-
-    .toast.show {
-        transform: translateY(0);
-        opacity: 1;
-    }
-
-    .toast.success {
-        border-color: rgba(34, 197, 94, .3);
-    }
-
-    .toast.error {
-        border-color: rgba(239, 68, 68, .3);
-    }
-
-    ::-webkit-scrollbar {
-        width: 5px;
-        height: 5px;
-    }
-
-    ::-webkit-scrollbar-track {
-        background: transparent;
-    }
-
-    ::-webkit-scrollbar-thumb {
-        background: var(--surface3);
-        border-radius: 5px;
-    }
-
-    @media (max-width: 700px) {
-        :root {
-            --sidebar: 240px;
-        }
-
-        .url-label {
-            display: none;
-        }
-    }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌟 CANLI TV</title>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg:#080b10;
+  --bg2:#0e1318;
+  --bg3:#141a22;
+  --border:rgba(255,255,255,0.06);
+  --accent:#e8373d;
+  --gold:#f5c842;
+  --text:#e8eaf0;
+  --muted:#5a6478;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:16px 28px;
+  background:rgba(8,11,16,0.97);
+  border-bottom:1px solid var(--border);
+}
+
+.logo{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:26px;
+  letter-spacing:3px;
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+
+.logo-dot{
+  width:10px;height:10px;
+  background:var(--accent);
+  border-radius:50%;
+}
+
+.app{
+  display:grid;
+  grid-template-columns:280px 1fr;
+  height:calc(100vh - 61px);
+}
+
+.sidebar{
+  background:var(--bg2);
+  border-right:1px solid var(--border);
+  display:flex;
+  flex-direction:column;
+}
+
+.sidebar-tabs{
+  display:flex;
+  border-bottom:1px solid var(--border);
+}
+
+.tab-btn{
+  flex:1;
+  background:none;
+  border:none;
+  color:var(--muted);
+  padding:12px;
+  cursor:pointer;
+}
+.tab-btn.active{
+  color:#fff;
+  border-bottom:2px solid var(--accent);
+}
+
+.cat-bar{
+  display:flex;
+  gap:6px;
+  padding:10px;
+  overflow-x:auto;
+}
+
+.cat-pill{
+  background:var(--bg3);
+  color:var(--muted);
+  padding:5px 12px;
+  border-radius:20px;
+  cursor:pointer;
+  font-size:11px;
+}
+.cat-pill.active{
+  background:var(--accent);
+  color:#fff;
+}
+
+.channel-list{
+  flex:1;
+  overflow-y:auto;
+  padding:6px;
+}
+
+.channel{
+  display:flex;
+  gap:10px;
+  padding:8px;
+  border-radius:8px;
+  cursor:pointer;
+}
+.channel:hover{
+  background:var(--bg3);
+}
+.channel.active{
+  background:rgba(232,55,61,.15);
+}
+
+.ch-logo{
+  width:40px;height:40px;
+  background:var(--bg3);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:6px;
+}
+
+.main{
+  display:flex;
+  flex-direction:column;
+  background:#000;
+}
+
+.player-ratio{
+  position:relative;
+  width:100%;
+  padding-top:50%;
+  background:#000;
+}
+
+#video{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  display:none;
+}
+
+.player-idle{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  color:var(--muted);
+}
+</style>
 </head>
 <body>
 
-    <div class="topbar">
-        <button class="toggle-sb" onclick="toggleSidebar()">☰</button>
-        <div class="logo">◈ NOVA</div>
-        <div class="topbar-div"></div>
-        <div class="url-bar">
-            <span class="url-label">URL</span>
-            <input id="urlInput" type="text" placeholder="m3u8 / iframe / YouTube linki yapıştır...">
-        </div>
-        <button class="btn btn-accent" onclick="playFromUrl()">▶ Oynat</button>
-        <button class="btn btn-purple" onclick="openAddModal()">+ Kanal</button>
-    </div>
+<header>
+  <div class="logo">
+    <div class="logo-dot"></div>
+    CANLI TV
+  </div>
+</header>
 
-    <div class="main">
-        <div class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <span class="sidebar-title">Kanallar</span>
-                <span class="ch-count" id="chCount">0</span>
-            </div>
-            <div class="cat-tabs" id="catTabs">
-                <div class="cat-tab active" onclick="filterCat('all',this)">Tümü</div>
-            </div>
-            <div class="search-wrap">
-                <input class="search-input" id="searchInput" type="text" placeholder="🔍  Kanal ara..." oninput="filterChannels()">
-            </div>
-            <div class="channel-list" id="channelList">
-                <div class="empty-state">
-                    <div class="empty-icon">⏳</div>
-                    <div class="empty-text">Liste yükleniyor...</div>
-                </div>
-            </div>
-        </div>
+<div class="app">
 
-        <div class="player-area">
-            <div class="player-wrap" id="playerWrap">
-                <div class="player-inner">
-                    <div class="placeholder" id="placeholder">
-                        <div class="ph-icon">◈</div>
-                        <div class="ph-text">Oynatmak için kanal seç</div>
-                    </div>
-                    <video id="videoPlayer" controls playsinline></video>
-                    <iframe id="iframePlayer" allowfullscreen allow="autoplay; encrypted-media; picture-in-picture"></iframe>
-                    <div class="loading-overlay" id="loadingOverlay">
-                        <div class="spinner"></div>
-                        <div class="loading-text" id="loadingText">Bağlanıyor...</div>
-                    </div>
-                </div>
-            </div>
+<!-- SIDEBAR -->
+<aside class="sidebar">
 
-            <div class="player-info" id="playerInfo" style="display:none">
-                <span class="np-label">▶ Şimdi</span>
-                <span class="np-title" id="npTitle">—</span>
-                <div class="live-badge">
-                    <div class="live-dot"></div>
-                    CANLI
-                </div>
-                <span class="stream-quality" id="streamQuality" style="display:none">HLS</span>
-                <a class="vlc-btn" id="vlcBtn" href="#" style="display:none">🎬 VLC ile Aç</a>
-                <button class="btn btn-ghost" onclick="enterFullscreen()" style="font-size:15px;padding:6px 10px;">⛶</button>
-            </div>
+  <div class="sidebar-tabs">
+    <button class="tab-btn active" onclick="switchTab('all',this)">TÜM KANALLAR</button>
+    <button class="tab-btn" onclick="switchTab('fav',this)">⭐ FAVORİLER</button>
+  </div>
 
-            <div class="info-panel">
-                <div class="info-grid" id="infoGrid"></div>
-            </div>
-        </div>
-    </div>
+  <div class="cat-bar" id="catBar">
+    <button class="cat-pill active" onclick="filterCat('',this)">Tümü</button>
+  </div>
 
-    <!-- ADD CHANNEL MODAL -->
-    <div class="modal-overlay" id="addModal">
-        <div class="modal">
-            <div class="modal-title">+ Kanal Ekle</div>
-            <div class="modal-sub">M3U8, YouTube, iframe veya VLC linki ekle.</div>
-            <div class="form-row">
-                <label class="form-label">Kanal Adı *</label>
-                <input class="input-full" id="addName" type="text" placeholder="Örn: TRT 1">
-            </div>
-            <div class="form-row">
-                <label class="form-label">Kategori</label>
-                <input class="input-full" id="addCat" type="text" placeholder="Haber, Spor, Film...">
-            </div>
-            <div class="form-row">
-                <label class="form-label">URL *</label>
-                <input class="input-full" id="addUrl" type="text" placeholder="https://...m3u8 veya YouTube/iframe URL">
-            </div>
-            <div class="form-row">
-                <label class="form-label">Logo URL (opsiyonel)</label>
-                <input class="input-full" id="addLogo" type="text" placeholder="https://...logo.png">
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-ghost" onclick="closeModal('addModal')">İptal</button>
-                <button class="btn btn-purple" onclick="addChannel()">Ekle</button>
-            </div>
-        </div>
-    </div>
+  <div class="channel-list" id="channelList">
+    Yükleniyor...
+  </div>
 
-    <div class="toast" id="toast"></div>
+</aside>
 
-    <script>
-    // ════════════════════════════════════════════════
-    //  GÖMÜLİ M3U LİSTESİ
-    // ════════════════════════════════════════════════
-    const M3U_URL = "https://raw.githubusercontent.com/kadirsener1/tivim/refs/heads/main/1.m3u";
+<!-- MAIN -->
+<main class="main">
 
-    // CORS proxy'ler (sırayla denenecek)
-    const PROXIES = [
-    url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
-    url => `https://corsproxy.io/?${encodeURIComponent(url)}`,
-    url => `https://proxy.cors.sh/${url}`,
-    ];
+<div class="player-ratio">
 
-    // ════════════════════════════════════════════════
-    //  STATE
-    // ════════════════════════════════════════════════
-    let channels = [],
-        filtered = [],
-        currentCat = 'all',
-        hlsInst = null;
+  <div class="player-idle" id="playerIdle">
+    📺 <br> İzlemek için kanal seçin
+  </div>
 
-    // ════════════════════════════════════════════════
-    //  HELPERS
-    // ════════════════════════════════════════════════
-    function detectType(url) {
-        if (!url)
-            return 'hls';
-        const u = url.trim().toLowerCase();
-        if (u.includes('youtube.com') || u.includes('youtu.be'))
-            return 'youtube';
-        if (/\.(mp4|webm|ogg)(\?|$)/.test(u))
-            return 'video';
-        return 'hls';
-    }
-    const typeBadge = t => ({
-        hls: 'hls',
-        youtube: 'yt',
-        iframe: 'iframe',
-        vlc: 'vlc',
-        video: 'hls'
-    }[t] || 'hls');
-    const typeIcon = t => ({
-        hls: '📡',
-        youtube: '▶',
-        iframe: '🌐',
-        vlc: '🎬',
-        video: '🎥'
-    }[t] || '📡');
+  <video id="video" controls playsinline></video>
 
-    function ytEmbed(url) {
-        for (const p of [/youtu\.be\/([^?&#]+)/, /[?&]v=([^&#]+)/, /embed\/([^?&#]+)/, /shorts\/([^?&#]+)/]) {
-            const m = url.match(p);
-            if (m)
-                return `https://www.youtube.com/embed/${m[1]}?autoplay=1&rel=0`;
-        }
-        return null;
-    }
+</div>
 
-    // ════════════════════════════════════════════════
-    //  HLS PLAYER — çok katmanlı fallback
-    // ════════════════════════════════════════════════
-    function playHLS(url, vid, onSuccess, onFail) {
-        if (hlsInst) {
-            hlsInst.destroy();
-            hlsInst = null;
-        }
+</main>
 
-        // Safari / iOS native HLS
-        if (!Hls.isSupported() && vid.canPlayType('application/vnd.apple.mpegurl')) {
-            vid.src = url;
-            vid.addEventListener('loadedmetadata', () => {
-                vid.play().catch(() => {});
-                onSuccess('Native HLS');
-            }, {
-                once: true
-            });
-            vid.addEventListener('error', () => onFail(), {
-                once: true
-            });
-            return;
-        }
+</div>
 
-        if (!Hls.isSupported()) {
-            onFail();
-            return;
-        }
+<script>
+/* ========== DATA ========== */
+const M3U_URL="https://raw.githubusercontent.com/kadirsener1/tivim/refs/heads/main/1.m3u";
 
-        const tryWithUrl = (src, label) => {
-            if (hlsInst)
-                hlsInst.destroy();
-            hlsInst = new Hls({
-                enableWorker: true,
-                lowLatencyMode: true,
-                maxBufferLength: 30,
-                maxMaxBufferLength: 60,
-                maxBufferSize: 60 * 1000 * 1000,
-                xhrSetup: xhr => {
-                    xhr.withCredentials = false;
-                }
-            });
-            hlsInst.loadSource(src);
-            hlsInst.attachMedia(vid);
-            hlsInst.on(Hls.Events.MANIFEST_PARSED, (e, data) => {
-                const levels = data.levels || [];
-                const maxH = levels.reduce((m, l) => l.height > m ? l.height : m, 0);
-                onSuccess(maxH ? `${maxH}p · ${label}` : label);
-                vid.play().catch(() => {});
-            });
-            hlsInst.on(Hls.Events.ERROR, (e, d) => {
-                if (d.fatal) {
-                    hlsInst.destroy();
-                    hlsInst = null;
-                    onFail(label);
-                }
-            });
-        };
+let allChannels=[];
+let favorites=JSON.parse(localStorage.getItem("favorites")||"[]");
+let currentCh=null;
+let currentTab="all";
+let currentCat="";
+let hls;
 
-        // 1️⃣ Direkt dene
-        tryWithUrl(url, 'Direkt HLS');
+/* ========== LOAD M3U ========== */
+fetch(M3U_URL)
+.then(r=>r.text())
+.then(txt=>{
+  const lines=txt.split("\n");
+  for(let i=0;i<lines.length;i++){
+    if(lines[i].startsWith("#EXTINF")){
+      const name=lines[i].split(",")[1]||"Kanal";
+      const url=lines[i+1]?.trim();
+      if(!url?.startsWith("http"))continue;
 
-        // Manifest load hatasında proxy'leri sırayla dene
-        let proxyIdx = 0;
-        const origFail = onFail;
-        onFail = (from) => {
-            if (proxyIdx < PROXIES.length) {
-                const proxied = PROXIES[proxyIdx++](url);
-                setLoadingText(`Proxy ${proxyIdx} deneniyor...`);
-                tryWithUrl(proxied, `Proxy ${proxyIdx}`);
-            } else {
-                origFail(from);
-            }
-        };
+      const g=lines[i].match(/group-title="([^"]*)"/i);
+      const l=lines[i].match(/tvg-logo="([^"]*)"/i);
 
-        hlsInst.on(Hls.Events.ERROR, (e, d) => {
-            if (d.fatal && d.type === Hls.ErrorTypes.NETWORK_ERROR) {
-                hlsInst.destroy();
-                hlsInst = null;
-                onFail('direct');
-            }
-        });
-    }
-
-    // ════════════════════════════════════════════════
-    //  PLAY CHANNEL
-    // ════════════════════════════════════════════════
-    function playChannel(ch, idx) {
-        const vid = document.getElementById('videoPlayer');
-        const ifr = document.getElementById('iframePlayer');
-
-        // Reset UI
-        document.getElementById('placeholder').style.display = 'none';
-        vid.style.display = 'none';
-        vid.src = '';
-        ifr.style.display = 'none';
-        ifr.src = '';
-        if (hlsInst) {
-            hlsInst.destroy();
-            hlsInst = null;
-        }
-
-        showLoading(true, 'Bağlanıyor...');
-        document.querySelectorAll('.channel-item').forEach(el => el.classList.remove('active'));
-        const el = document.querySelector(`.channel-item[data-idx="${idx}"]`);
-        if (el) {
-            el.classList.add('active');
-            el.scrollIntoView({
-                block: 'nearest'
-            });
-        }
-
-        document.getElementById('npTitle').textContent = ch.name;
-        document.getElementById('playerInfo').style.display = 'flex';
-        document.getElementById('vlcBtn').href = 'vlc://' + ch.url;
-
-        const type = ch.type || detectType(ch.url);
-        document.getElementById('vlcBtn').style.display = (type === 'hls' || type === 'vlc' || type === 'video') ? 'flex' : 'none';
-        document.getElementById('streamQuality').style.display = 'none';
-        renderInfoCards(ch);
-
-        // YouTube
-        if (type === 'youtube') {
-            const embed = ytEmbed(ch.url);
-            if (embed) {
-                ifr.src = embed;
-                ifr.style.display = 'block';
-            }
-            showLoading(false);
-            return;
-        }
-
-        // Iframe
-        if (type === 'iframe') {
-            ifr.src = ch.url;
-            ifr.style.display = 'block';
-            showLoading(false);
-            return;
-        }
-
-        // Native video file
-        if (type === 'video') {
-            vid.style.display = 'block';
-            vid.src = ch.url;
-            vid.play().catch(() => {});
-            showLoading(false);
-            return;
-        }
-
-        // HLS — ana yol
-        vid.style.display = 'block';
-        setLoadingText('HLS stream bağlanıyor...');
-
-        playHLS(
-        ch.url, vid,
-        (label) => {
-            showLoading(false);
-            const ql = document.getElementById('streamQuality');
-            ql.textContent = label;
-            ql.style.display = 'inline-block';
-        },
-        () => {
-            // Tüm proxy'ler de başarısız → iframe fallback
-            vid.style.display = 'none';
-            ifr.src = ch.url;
-            ifr.style.display = 'block';
-            showLoading(false);
-            toast('⚠️ HLS başarısız — iframe moduna geçildi', 'error');
-        }
-        );
-    }
-
-    function playFromUrl() {
-        const url = document.getElementById('urlInput').value.trim();
-        if (!url)
-            return;
-        const ch = {
-            name: url.split('/').pop().split('?')[0] || 'Stream',
-            url,
-            type: detectType(url),
-            category: 'URL'
-        };
-        playChannel(ch, -1);
-        document.getElementById('urlInput').value = '';
-    }
-
-    // ════════════════════════════════════════════════
-    //  INFO CARDS
-    // ════════════════════════════════════════════════
-    function renderInfoCards(ch) {
-        document.getElementById('infoGrid').innerHTML = [
-        {
-            l: 'Kanal',
-            v: ch.name
-        }, {
-            l: 'Kategori',
-            v: ch.category || '—'
-        },
-        {
-            l: 'Tür',
-            v: (ch.type || 'HLS').toUpperCase()
-        }, {
-            l: 'URL',
-            v: ch.url
-        }
-        ].map(i => `<div class="info-card"><div class="ic-label">${i.l}</div><div class="ic-value">${i.v}</div></div>`).join('');
-    }
-
-    // ════════════════════════════════════════════════
-    //  M3U PARSER
-    // ════════════════════════════════════════════════
-    function parseM3U(text) {
-        const lines = text.split('\n'),
-            result = [];
-        let cur = {};
-        for (const raw of lines) {
-            const line = raw.trim();
-            if (!line)
-                continue;
-            if (line.startsWith('#EXTINF')) {
-                cur = {};
-                cur.name = line.split(',').slice(1).join(',').trim() || 'Kanal';
-                const g = line.match(/group-title="([^"]*)"/i);
-                cur.category = g ? g[1] : 'Genel';
-                const l = line.match(/tvg-logo="([^"]*)"/i);
-                cur.logo = l ? l[1] : '';
-            } else if (!line.startsWith('#') && cur.name) {
-                cur.url = line;
-                cur.type = detectType(line);
-                result.push({
-                    ...cur
-                });
-                cur = {};
-            }
-        }
-        return result;
-    }
-
-// ════════════════════════════════════════════════
-//  AUTO-LOAD M3U (önce direkt, sonra proxy)
-// ════════════════════════════════════════════════
-async function autoLoadM3U() {
-
-  // 1️⃣ Önce direkt GitHub'dan dene
-  try {
-    const res = await fetch(M3U_URL, { cache: 'no-store' });
-    if (res.ok) {
-      const text = await res.text();
-      const parsed = parseM3U(text);
-      if (parsed.length) {
-        loadChannels(parsed);
-        toast(`✅ ${parsed.length} kanal yüklendi`, 'success');
-        return;
-      }
-    }
-  } catch (e) {
-    console.log("Direkt yükleme başarısız, proxy deneniyor...");
-  }
-
-  // 2️⃣ Proxy'leri sırayla dene
-  for (let i = 0; i < PROXIES.length; i++) {
-    try {
-      const res = await fetch(PROXIES[i](M3U_URL), { cache: 'no-store' });
-      if (!res.ok) continue;
-
-      const text = await res.text();
-      const parsed = parseM3U(text);
-      if (parsed.length) {
-        loadChannels(parsed);
-        toast(`✅ ${parsed.length} kanal yüklendi (Proxy ${i+1})`, 'success');
-        return;
-      }
-    } catch (e) {
-      // sıradaki proxy
+      allChannels.push({
+        name,
+        url,
+        group:g?g[1]:"Genel",
+        logo:l?l[1]:""
+      });
     }
   }
+  buildCats();
+  renderList();
+});
 
-  // 3️⃣ Hepsi başarısız
-  document.getElementById('channelList').innerHTML =
-    `<div class="empty-state">
-       <div class="empty-icon">❌</div>
-       <div class="empty-text">Liste yüklenemedi.<br>Lütfen sayfayı yenileyin.</div>
-     </div>`;
-  toast('❌ M3U listesi yüklenemedi', 'error');
+/* ========== UI ========== */
+function buildCats(){
+  const bar=document.getElementById("catBar");
+  const groups=["",...new Set(allChannels.map(c=>c.group))];
+
+  bar.innerHTML=groups.map((g,i)=>`
+    <button class="cat-pill ${i==0?"active":""}"
+    onclick="filterCat('${g}',this)">
+      ${i==0?"Tümü":g}
+    </button>`).join("");
 }
 
-    // ════════════════════════════════════════════════
-    //  CHANNEL MANAGEMENT
-    // ════════════════════════════════════════════════
-    function loadChannels(list) {
-        channels = list;
-        buildCats();
-        filterChannels();
+function filterCat(c,el){
+  currentCat=c;
+  document.querySelectorAll(".cat-pill").forEach(b=>b.classList.remove("active"));
+  el.classList.add("active");
+  renderList();
+}
+
+function switchTab(t,b){
+  currentTab=t;
+  document.querySelectorAll(".tab-btn").forEach(x=>x.classList.remove("active"));
+  b.classList.add("active");
+  renderList();
+}
+
+function renderList(){
+  let list=allChannels;
+
+  if(currentTab=="fav") list=list.filter(c=>favorites.includes(c.url));
+  if(currentCat) list=list.filter(c=>c.group==currentCat);
+
+  document.getElementById("channelList").innerHTML=
+  list.map((c,i)=>`
+    <div class="channel ${currentCh?.url==c.url?"active":""}"
+      onclick="play(${allChannels.indexOf(c)})">
+      <div class="ch-logo">📺</div>
+      <div>${c.name}</div>
+    </div>
+  `).join("");
+}
+    <script>
+
+/* ===== PLAY (OPTIMIZE EDİLMİŞ) ===== */
+const video = document.getElementById("video");
+
+function play(idx){
+  const ch=allChannels[idx];
+  if(!ch) return;
+
+  currentCh=ch;
+
+  document.getElementById("playerIdle").style.display="none";
+  video.style.display="block";
+
+  if(Hls.isSupported()){
+    if(hls){
+      hls.destroy();
+      hls=null;
     }
 
-    function buildCats() {
-        const cats = ['all', ...new Set(channels.map(c => c.category).filter(Boolean))];
-        document.getElementById('catTabs').innerHTML = cats.map(c => `
-    <div class="cat-tab ${c === currentCat ? 'active' : ''}" onclick="filterCat(${JSON.stringify(c)},this)">
-      ${c === 'all' ? 'Tümü' : c}
-    </div>`
-        ).join('');
-    }
+    hls=new Hls({
+      enableWorker:true,
+      lowLatencyMode:true,
 
-    function filterCat(cat, el) {
-        currentCat = cat;
-        document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
-        el.classList.add('active');
-        filterChannels();
-    }
+      // 🔥 DONMA OPTİMİZASYON
+      maxBufferLength:10,
+      maxMaxBufferLength:20,
+      backBufferLength:30,
 
-    function filterChannels() {
-        const q = document.getElementById('searchInput').value.toLowerCase();
-        filtered = channels.filter(ch => {
-            const catOk = currentCat === 'all' || ch.category === currentCat;
-            const nameOk = !q || ch.name.toLowerCase().includes(q) || (ch.category || '').toLowerCase().includes(q);
-            return catOk && nameOk;
-        });
-        renderList();
-    }
+      liveSyncDurationCount:3,
 
-    function renderList() {
-        document.getElementById('chCount').textContent = filtered.length;
-        const list = document.getElementById('channelList');
-        if (!filtered.length) {
-            list.innerHTML = `<div class="empty-state"><div class="empty-icon">🔍</div><div class="empty-text">Sonuç bulunamadı</div></div>`;
-            return;
-        }
-        list.innerHTML = filtered.map((ch, i) => {
-            const type = ch.type || detectType(ch.url),
-                badge = typeBadge(type),
-                icon = typeIcon(type);
-            const logo = ch.logo ? `<img src="${ch.logo}" loading="lazy" onerror="this.parentNode.textContent='${icon}'">` : icon;
-            return `<div class="channel-item" data-idx="${i}" onclick="playChannel(filtered[${i}],${i})">
-      <div class="ch-logo">${logo}</div>
-      <div class="ch-info"><div class="ch-name">${ch.name}</div><div class="ch-meta">${ch.category || ''}</div></div>
-      <span class="ch-badge b-${badge}">${badge.toUpperCase()}</span>
-    </div>`
-            ;
-        }).join('');
-    }
-
-    function addChannel() {
-        const name = document.getElementById('addName').value.trim();
-        const url = document.getElementById('addUrl').value.trim();
-        const cat = document.getElementById('addCat').value.trim() || 'Genel';
-        const logo = document.getElementById('addLogo').value.trim();
-        if (!name || !url) {
-            toast('Ad ve URL zorunlu', 'error');
-            return;
-        }
-        channels.push({
-            name,
-            url,
-            category: cat,
-            logo,
-            type: detectType(url)
-        });
-        buildCats();
-        filterChannels();
-        closeModal('addModal');
-        ['addName', 'addUrl', 'addCat', 'addLogo'].forEach(id => document.getElementById(id).value = '');
-        toast(`✅ "${name}" eklendi`, 'success');
-    }
-
-    // ════════════════════════════════════════════════
-    //  UI HELPERS
-    // ════════════════════════════════════════════════
-    function toggleSidebar() {
-        document.getElementById('sidebar').classList.toggle('collapsed');
-    }
-    function setLoadingText(t) {
-        document.getElementById('loadingText').textContent = t;
-    }
-    function showLoading(s, txt) {
-        document.getElementById('loadingOverlay').classList.toggle('show', s);
-        if (txt)
-            setLoadingText(txt);
-    }
-    function openAddModal() {
-        document.getElementById('addModal').classList.add('show');
-    }
-    function closeModal(id) {
-        document.getElementById(id).classList.remove('show');
-    }
-    function enterFullscreen() {
-        const p = document.getElementById('playerWrap');
-        if (p.requestFullscreen)
-            p.requestFullscreen();
-    }
-
-    document.querySelectorAll('.modal-overlay').forEach(o => o.addEventListener('click', e => {
-        if (e.target === o)
-            o.classList.remove('show');
-    }));
-    document.getElementById('urlInput').addEventListener('keydown', e => {
-        if (e.key === 'Enter')
-            playFromUrl();
+      fragLoadingMaxRetry:3,
+      fragLoadingRetryDelay:800,
+      levelLoadingMaxRetry:3,
+      levelLoadingRetryDelay:800
     });
 
-    let toastTimer;
-    function toast(msg, type) {
-        const el = document.getElementById('toast');
-        el.textContent = msg;
-        el.className = 'toast show ' + (type || '');
-        clearTimeout(toastTimer);
-        toastTimer = setTimeout(() => el.classList.remove('show'), 3500);
-    }
+    hls.loadSource(ch.url);
+    hls.attachMedia(video);
 
-    // START
-    autoLoadM3U();
-    </script>
+    hls.on(Hls.Events.MANIFEST_PARSED,()=>{
+      video.play().catch(()=>{});
+    });
+
+    hls.on(Hls.Events.ERROR,(e,d)=>{
+      if(d.fatal){
+        if(d.type==="networkError") hls.startLoad();
+        else if(d.type==="mediaError") hls.recoverMediaError();
+        else hls.destroy();
+      }
+    });
+
+  } else {
+    video.src=ch.url;
+    video.play().catch(()=>{});
+  }
+
+  video.volume=0.9;
+
+  renderList();
+}
+
+/* ===== STOP ===== */
+function stop(){
+  if(hls){hls.destroy();hls=null;}
+  video.pause();
+  video.src="";
+  video.style.display="none";
+  document.getElementById("playerIdle").style.display="flex";
+  currentCh=null;
+  renderList();
+}
+
+/* ===== NEXT / PREV ===== */
+function next(){
+  let i=allChannels.findIndex(c=>c.url==currentCh?.url);
+  play((i+1)%allChannels.length);
+}
+
+function prev(){
+  let i=allChannels.findIndex(c=>c.url==currentCh?.url);
+  play((i-1+allChannels.length)%allChannels.length);
+}
+
+/* ===== FAVORİ ===== */
+function toggleFav(url){
+  if(favorites.includes(url)){
+    favorites=favorites.filter(x=>x!=url);
+  }else{
+    favorites.push(url);
+  }
+  localStorage.setItem("favorites",JSON.stringify(favorites));
+  renderList();
+}
+
+/* ===== KEYBOARD ===== */
+document.addEventListener("keydown",(e)=>{
+  if(e.key==="ArrowRight") next();
+  if(e.key==="ArrowLeft") prev();
+  if(e.key==="Escape") stop();
+});
+
+/* ===== INIT ===== */
+renderList();
+
+</script>
+
 </body>
 </html>
