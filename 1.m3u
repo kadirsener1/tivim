@@ -1,7 +1,7 @@
 #EXTM3U
-#EXTINF:-1 tvg-id="androstreamlivebs1" tvg-name="BeIN Sports 1 HD" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Bein_sports_1.png/220px-Bein_sports_1.png" group-title="Spor",BeIN Sports 1 HD
+#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Bein_sports_1.png/220px-Bein_sports_1.png" group-title="Spor",BeIN Sports 1 HD
 https://andro.evrenosoglu53.lat/checklist/receptestt.m3u8
-#EXTINF:-1 tvg-id="androstreamlivebs2" tvg-name="BeIN Sports 2 HD" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Bein_sports_2.png/220px-Bein_sports_2.png" group-title="Spor",BeIN Sports 2 HD
+#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Bein_sports_2.png/220px-Bein_sports_2.png" group-title="Spor",BeIN Sports 2 HD
 https://andro.evrenosoglu53.lat/checklist/facebooklivebs2.m3u8
 #EXTINF:-1 tvg-id="androstreamlivebs3" tvg-name="BeIN Sports 3 HD" tvg-logo="" group-title="Spor",BeIN Sports 3 HD
 https://andro.evrenosoglu53.lat/checklist/facebooklivebs3.m3u8
