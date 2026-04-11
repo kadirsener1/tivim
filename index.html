@@ -903,7 +903,7 @@ function renderList() {
   }).join("");
 }
 
-/* ── PLAY ── */
+/* ── PLAY (senin orijinal mantığın) ── */
 const video = document.getElementById("video");
 
 function play(idx) {
@@ -911,62 +911,27 @@ function play(idx) {
   if (!ch) return;
   currentCh = ch;
 
+  // Göster
   document.getElementById("playerIdle").style.display = "none";
   video.style.display = "block";
 
+  // HLS — aynen senin kodundan
   if (Hls.isSupported()) {
-    if (hls) { hls.destroy(); hls = null; }
-
-    hls = new Hls({
-      enableWorker: true,
-      lowLatencyMode: true,
-      backBufferLength: 30,
-
-      // 📌 Buffer ayarları – donma azaltır
-      maxBufferLength: 30,
-      maxMaxBufferLength: 40,
-      maxBufferSize: 60,
-
-      liveSyncDurationCount: 1,
-      liveMaxLatencyDurationCount: 5,
-
-      fragLoadingMaxRetry: 5,
-      levelLoadingMaxRetry: 5,
-      manifestLoadingMaxRetry: 5
-    });
-
+    if (hls) hls.destroy();
+    hls = new Hls();
     hls.loadSource(ch.url);
     hls.attachMedia(video);
-
-    hls.on(Hls.Events.MANIFEST_PARSED, () => {
-      video.play().catch(()=>{});
-    });
-
-    // 📌 Ağ dalgalanmasında toparlama
-    hls.on(Hls.Events.ERROR, (event, data) => {
-      if (data.fatal) {
-        switch (data.type) {
-          case Hls.ErrorTypes.NETWORK_ERROR:
-            hls.startLoad();
-            break;
-          case Hls.ErrorTypes.MEDIA_ERROR:
-            hls.recoverMediaError();
-            break;
-          default:
-            hls.destroy();
-        }
-      }
-    });
-
+    hls.on(Hls.Events.MANIFEST_PARSED, () => video.play().catch(() => {}));
   } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
     video.src = ch.url;
-    video.play().catch(()=>{});
+    video.play().catch(() => {});
   } else {
     video.src = ch.url;
   }
 
   video.volume = document.querySelector(".vol-sl").value / 100;
 
+  // Now Playing bar
   const npLogo = document.getElementById("npLogo");
   npLogo.innerHTML = ch.logo
     ? `<img src="${ch.logo}" style="width:100%;height:100%;object-fit:contain;padding:2px;background:#0e1318" onerror="this.outerHTML='📺'">`
@@ -979,6 +944,7 @@ function play(idx) {
   renderList();
   showToast("▶ " + ch.name);
 }
+
 /* ── STOP ── */
 function stopPlayer() {
   if (hls) { hls.destroy(); hls = null; }
