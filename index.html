@@ -903,7 +903,6 @@ function renderList() {
   }).join("");
 }
 
-
 /* ── PLAY ── */
 const video = document.getElementById("video");
 
@@ -980,41 +979,6 @@ function play(idx) {
   renderList();
   showToast("▶ " + ch.name);
 }
-
-  // Göster
-  document.getElementById("playerIdle").style.display = "none";
-  video.style.display = "block";
-
-  // HLS — aynen senin kodundan
-  if (Hls.isSupported()) {
-    if (hls) hls.destroy();
-    hls = new Hls();
-    hls.loadSource(ch.url);
-    hls.attachMedia(video);
-    hls.on(Hls.Events.MANIFEST_PARSED, () => video.play().catch(() => {}));
-  } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
-    video.src = ch.url;
-    video.play().catch(() => {});
-  } else {
-    video.src = ch.url;
-  }
-
-  video.volume = document.querySelector(".vol-sl").value / 100;
-
-  // Now Playing bar
-  const npLogo = document.getElementById("npLogo");
-  npLogo.innerHTML = ch.logo
-    ? `<img src="${ch.logo}" style="width:100%;height:100%;object-fit:contain;padding:2px;background:#0e1318" onerror="this.outerHTML='📺'">`
-    : "📺";
-
-  document.getElementById("npTitle").innerHTML  = `${ch.name} <span class="on-air">ON AIR</span>`;
-  document.getElementById("npGroup").textContent = ch.group;
-
-  updateFavBtn();
-  renderList();
-  showToast("▶ " + ch.name);
-}
-
 /* ── STOP ── */
 function stopPlayer() {
   if (hls) { hls.destroy(); hls = null; }
