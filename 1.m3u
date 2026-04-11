@@ -3,6 +3,8 @@
 https://andro.evrenosoglu55.lat/checklist/batutest.m3u8
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="Spor",Smart Sport
 https://api.hitnova.net/s/smarts/mono.m3u8
+#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="Spor",Smart Sport golas
+https://j6v.d72577a9dd0ec50.sbs/smarts/mono.m3u8
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="Spor",Smart Sport 2
 https://api.hitnova.net/s/sms2/mono.m3u8
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/e/e6/Eurosport_1_Logo_2015.png" group-title="Spor",Eurosport
