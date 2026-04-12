@@ -94,12 +94,13 @@
     @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.4)}}
 
     /* ── SIDEBAR ── */
-    .sidebar{
-      width:380px;background:var(--card);display:flex;flex-direction:column;
-      border-left:1px solid rgba(0,229,255,.08);flex-shrink:0;
-      min-height:0;        /* ← EKLENDİ */
-      overflow:hidden;     /* ← EKLENDİ */
-    }
+  .sidebar{
+  width:380px;background:var(--card);display:flex;flex-direction:column;
+  border-left:1px solid rgba(0,229,255,.08);flex-shrink:0;
+  min-height:0;
+  overflow:hidden;
+  height:100%;
+}
 
     .sb-head{padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.05);flex-shrink:0}
     .sb-head h2{font-size:.95rem;font-weight:700;color:var(--accent);margin-bottom:10px}
@@ -127,9 +128,9 @@
     .tab.on{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#000;font-weight:700}
 
     /* ── CHANNEL LIST — DÜZELTME BURADA ── */
-  .ch-scroll{
+.ch-scroll{
   flex:1 1 0;
-  min-height:600px;          /* ← flex taşmasını engelle */
+  min-height:0;         /* ← flex taşmasını engelle */
       overflow-y:auto;
       overflow-x:hidden;
       -webkit-overflow-scrolling:touch;
