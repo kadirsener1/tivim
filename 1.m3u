@@ -1,4 +1,8 @@
 #EXTM3U
+#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="Spor",Smart Sport
+https://api.hitnova.net/s/zirve/mono.m3u8
+#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/9/92/BeIN_Sport_1_HD.jpg" group-title="Spor",BeIN Sports 1
+https://andro.evrenosoglu55.lat/checklist/batutest.m3u8
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Bein_sports_2.png/220px-Bein_sports_2.png" group-title="Spor",BeIN Sports 2 HD
 https://andro.evrenosoglu55.lat/checklist/facebooklivebs2.m3u8
 #EXTINF:-1 tvg-id="androstreamlivebs3" tvg-name="BeIN Sports 3 HD" tvg-logo="" group-title="Spor",BeIN Sports 3 HD
@@ -21,10 +25,8 @@ https://andro.evrenosoglu53.lat/checklist/facebooklivess1.m3u8
 https://andro.evrenosoglu53.lat/checklist/facebooklivess2.m3u8
 #EXTINF:-1 tvg-id="androstreamlivessplus1" tvg-name="S Sport Plus" tvg-logo="" group-title="Spor",S Sport Plus
 https://andro.evrenosoglu53.lat/checklist/facebooklivessplus1.m3u8
-#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/9/92/BeIN_Sport_1_HD.jpg" group-title="Spor",BeIN Sports 1
-https://andro.evrenosoglu55.lat/checklist/batutest.m3u8
-#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="Spor",Smart Sport
-https://api.hitnova.net/s/smarts/mono.m3u8
+
+
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="Spor",Smart Sport golas
 https://j6v.d72577a9dd0ec50.sbs/smarts/mono.m3u8
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="Spor",Smart Sport 2
