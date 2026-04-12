@@ -68,7 +68,6 @@
       font-family:'Inter';font-size:.9rem;
     }
 
-    /* spinner */
     .vid-spinner{
       position:absolute;inset:0;display:none;align-items:center;justify-content:center;
       background:rgba(0,0,0,.7);z-index:4;border-radius:16px;
@@ -80,7 +79,6 @@
     }
     @keyframes spin{to{transform:rotate(360deg)}}
 
-    /* now playing */
     .now-bar{
       display:flex;align-items:center;gap:14px;
       background:var(--card);border-radius:14px;padding:14px 20px;
@@ -99,9 +97,11 @@
     .sidebar{
       width:380px;background:var(--card);display:flex;flex-direction:column;
       border-left:1px solid rgba(0,229,255,.08);flex-shrink:0;
+      min-height:0;        /* ← EKLENDİ */
+      overflow:hidden;     /* ← EKLENDİ */
     }
 
-    .sb-head{padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.05)}
+    .sb-head{padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.05);flex-shrink:0}
     .sb-head h2{font-size:.95rem;font-weight:700;color:var(--accent);margin-bottom:10px}
 
     .s-wrap{position:relative}
@@ -126,9 +126,10 @@
     .tab:hover{background:rgba(0,229,255,.1);color:var(--accent)}
     .tab.on{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#000;font-weight:700}
 
-    /* ── CHANNEL LIST ── */
+    /* ── CHANNEL LIST — DÜZELTME BURADA ── */
     .ch-scroll{
-      flex:1;
+      flex:1 1 0;            /* ← kalan alanı kap */
+      min-height:0;          /* ← flex taşmasını engelle */
       overflow-y:auto;
       overflow-x:hidden;
       -webkit-overflow-scrolling:touch;
@@ -255,7 +256,6 @@ const srcEl   = document.getElementById('src');
 const footEl  = document.getElementById('foot');
 const bootEl  = document.getElementById('boot');
 
-// ────── INIT ──────
 async function init(){
   try{
     let text = "";
@@ -276,7 +276,6 @@ async function init(){
   }
 }
 
-// ────── PARSE M3U ──────
 function parse(raw){
   const lines = raw.split(/\r?\n/);
   let tmp = {};
@@ -295,7 +294,6 @@ function parse(raw){
   }
 }
 
-// ────── TABS ──────
 function mkTabs(){
   const gs = ["Tümü",...new Set(channels.map(c=>c.group))];
   tabsEl.innerHTML = gs.map(g=>
@@ -304,7 +302,6 @@ function mkTabs(){
 }
 function setGrp(g){ activeGrp=g; mkTabs(); render(); }
 
-// ────── RENDER ──────
 function render(){
   const q = srcEl.value.toLowerCase();
   const list = channels.filter(c=>{
@@ -328,7 +325,6 @@ function render(){
 
 function pick(i){ play(channels[i]); }
 
-// ────── DESTROY OLD PLAYER ──────
 function destroyPlayers(){
   if(hls){ try{hls.destroy()}catch(e){} hls=null; }
   if(mpegtsPlayer){ try{mpegtsPlayer.destroy()}catch(e){} mpegtsPlayer=null; }
@@ -336,7 +332,6 @@ function destroyPlayers(){
   vid.load();
 }
 
-// ────── PLAY ──────
 async function play(ch){
   curCh  = ch;
   curUrl = ch.url;
@@ -353,23 +348,19 @@ async function play(ch){
 
   const url = ch.url;
 
-  // ── 1) HLS.js ──
   if(Hls.isSupported() && /\.m3u8?/i.test(url)){
     await tryHLS(url, ch);
     return;
   }
 
-  // ── 2) TS stream → mpegts.js ──
   if(typeof mpegts !== 'undefined' && mpegts.isSupported() && /\.ts(\?|$)/i.test(url)){
     tryMpegTS(url);
     return;
   }
 
-  // ── 3) Native (Safari HLS / mp4 / etc) ──
   tryNative(url);
 }
 
-// ── HLS.js with retry ──
 function tryHLS(url){
   return new Promise(resolve=>{
     let retries = 0;
@@ -409,13 +400,10 @@ function tryHLS(url){
           return;
         }
 
-        // Retry with CORS proxy
         retries++;
         if(retries <= maxRetries && CORS_PROXIES[retries]){
-          console.log("Retry #"+retries+" with proxy");
           attempt(CORS_PROXIES[retries] + encodeURIComponent(url));
         } else {
-          // Fallback: try mpegts
           if(typeof mpegts !== 'undefined' && mpegts.isSupported()){
             tryMpegTS(url);
           } else {
@@ -430,7 +418,6 @@ function tryHLS(url){
   });
 }
 
-// ── mpegts.js ──
 function tryMpegTS(url){
   destroyPlayers();
   try{
@@ -455,7 +442,6 @@ function tryMpegTS(url){
   }
 }
 
-// ── Native ──
 function tryNative(url){
   destroyPlayers();
   vid.src = url;
@@ -476,7 +462,6 @@ function tryNative(url){
 
   vid.play().catch(()=>{});
 
-  // Timeout
   setTimeout(()=>{
     if(vid.readyState < 2 && !errOv.classList.contains('show')){
       spinner.classList.remove('show');
@@ -489,10 +474,8 @@ function retry(){
   if(curCh) play(curCh);
 }
 
-// ── SEARCH ──
 srcEl.addEventListener('input', ()=>render());
 
-// ── KEYBOARD NAV ──
 document.addEventListener('keydown', e=>{
   if(document.activeElement === srcEl) return;
   const i = channels.findIndex(c=>c.url===curUrl);
@@ -504,7 +487,6 @@ document.addEventListener('keydown', e=>{
   }
 });
 
-// ── GO ──
 init();
 </script>
 </body>
