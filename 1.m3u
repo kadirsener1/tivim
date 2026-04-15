@@ -1,56 +1,45 @@
 #EXTM3U
-#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="Spor",BeIN Sports hit zirve
+#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="Spor",BeIN Sports 1
 https://api.hitnova.net/s/zirve/mono.m3u8
-#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/9/92/BeIN_Sport_1_HD.jpg" group-title="Spor",BeIN Sports 1 batu
-https://andro.evrenosoglu55.lat/checklist/batutest.m3u8
-#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/9/92/BeIN_Sport_1_HD.jpg" group-title="Spor",BeIN Sports 1 recep
-https://andro.evrenosoglu55.lat/checklist/receptest.m3u8
-#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Bein_sports_2.png/220px-Bein_sports_2.png" group-title="Spor",BeIN Sports 2 HD
-https://andro.evrenosoglu55.lat/checklist/facebooklivebs2.m3u8
-#EXTINF:-1 tvg-id="androstreamlivebs3" tvg-name="BeIN Sports 3 HD" tvg-logo="" group-title="Spor",BeIN Sports 3 HD
-https://andro.evrenosoglu55.lat/checklist/facebooklivebs3.m3u8
-#EXTINF:-1 tvg-id="androstreamlivebs4" tvg-name="BeIN Sports 4 HD" tvg-logo="" group-title="Spor",BeIN Sports 4 HD
-https://andro.evrenosoglu55.lat/checklist/facebooklivebs4.m3u8
-#EXTINF:-1 tvg-id="androstreamlivegs" tvg-name="GS TV" tvg-logo="" group-title="Spor",GS TV
-https://andro.evrenosoglu55.lat/checklist/facebooklivegs.m3u8
-#EXTINF:-1 tvg-id="androstreamlivefb" tvg-name="FB TV" tvg-logo="" group-title="Spor",FB TV
-https://andro.evrenosoglu55.lat/checklist/facebooklivefb.m3u8
-#EXTINF:-1 tvg-id="androstreamlivenba" tvg-name="NBA TV" tvg-logo="" group-title="Spor",NBA TV
-https://andro.evrenosoglu53.lat/checklist/facebooklivenba.m3u8
-#EXTINF:-1 tvg-id="androstreamlivebsm1" tvg-name="BeIN Sports Max 1" tvg-logo="" group-title="Spor",BeIN Sports Max 1
-https://andro.evrenosoglu53.lat/checklist/facebooklivebsm1.m3u8
-#EXTINF:-1 tvg-id="androstreamlivebsm2" tvg-name="BeIN Sports Max 2" tvg-logo="" group-title="Spor",BeIN Sports Max 2
-https://andro.evrenosoglu53.lat/checklist/facebooklivebsm2.m3u8
-#EXTINF:-1 tvg-id="androstreamlivess1" tvg-name="S Sport HD" tvg-logo="https://upload.wikimedia.org/wikipedia/tr/4/49/S_Sport_logo.png" group-title="Spor",S Sport HD
-https://andro.evrenosoglu53.lat/checklist/facebooklivess1.m3u8
-#EXTINF:-1 tvg-id="androstreamlivess2" tvg-name="S Sport 2 HD" tvg-logo="" group-title="Spor",S Sport 2 HD
-https://andro.evrenosoglu53.lat/checklist/facebooklivess2.m3u8
-#EXTINF:-1 tvg-id="androstreamlivessplus1" tvg-name="S Sport Plus" tvg-logo="" group-title="Spor",S Sport Plus
-https://andro.evrenosoglu53.lat/checklist/facebooklivessplus1.m3u8
-
-
-#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="Spor",Smart Sport golas
-https://j6v.d72577a9dd0ec50.sbs/smarts/mono.m3u8
-#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="Spor",Smart Sport 2
-https://api.hitnova.net/s/sms2/mono.m3u8
-#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/e/e6/Eurosport_1_Logo_2015.png" group-title="Spor",Eurosport
-https://api.hitnova.net/s/eu1/mono.m3u8
-#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/d/d0/Eurosport_2_Logo_2015.png" group-title="Spor",Eurosport 2
-https://api.hitnova.net/s/eu2/mono.m3u8
+#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="Spor",BeIN Sports 2
+https://api.hitnova.net/s/b2/mono.m3u8
+#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="Spor",BeIN Sports 3
+https://api.hitnova.net/s/b3/mono.m3u8
+#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="Spor",BeIN Sports 4
+https://api.hitnova.net/s/b4/mono.m3u8
+#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="Spor",BeIN Sports 5
+https://api.hitnova.net/s/b5/mono.m3u8
+#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="Spor",BeIN Sports Max 1
+https://api.hitnova.net/s/bm1/mono.m3u8
+#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="Spor",BeIN Sports Max 2
+https://api.hitnova.net/s/bm2/mono.m3u8
+#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/0/07/S_Sport_logo.png" group-title="Spor",S Sport 1
+https://api.hitnova.net/s/ss/mono.m3u8
+#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/0/07/S_Sport_logo.png" group-title="Spor",S Sport 2
+https://api.hitnova.net/s/ss2/mono.m3u8
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/d/db/TivibuSporLogo1.PNG" group-title="Spor",Tivibu Spor
 https://api.hitnova.net/s/t1/mono.m3u8
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/d/db/TivibuSporLogo1.PNG" group-title="TR",Tivibu Spor 2
 https://api.hitnova.net/s/t2/mono.m3u8
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/d/db/TivibuSporLogo1.PNG" group-title="TR",Tivibu Spor 3
 https://api.hitnova.net/s/t3/mono.m3u8
-#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/0/07/S_Sport_logo.png" group-title="Spor",S Sport 1
-https://api.hitnova.net/s/ss/mono.m3u8
-#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/0/07/S_Sport_logo.png" group-title="Spor",S Sport 2
-https://api.hitnova.net/s/ss2/mono.m3u8
-#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/e/e9/A_Spor_logosu.png" group-title="Spor",A Spor
-https://api.hitnova.net/s/as/mono.m3u8
+#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/d/db/TivibuSporLogo1.PNG" group-title="TR",Tivibu Spor 4
+https://api.hitnova.net/s/t4/mono.m3u8
+#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="Spor",Smart Sport 1
+https://api.hitnova.net/s/sms1/mono.m3u8
+#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="Spor",Smart Sport 2
+https://api.hitnova.net/s/sms2/mono.m3u8
+
+#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/e/e6/Eurosport_1_Logo_2015.png" group-title="Spor",Eurosport
+https://api.hitnova.net/s/eu1/mono.m3u8
+#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/d/d0/Eurosport_2_Logo_2015.png" group-title="Spor",Eurosport 2
+https://api.hitnova.net/s/eu2/mono.m3u8
+
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/c/c4/TRT_Spor_kurumsal_logo.png" group-title="Spor",Trt Spor
 https://api.hitnova.net/s/trtspor/mono.m3u8
+#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/e/e9/A_Spor_logosu.png" group-title="Spor",A Spor
+https://api.hitnova.net/s/as/mono.m3u8
+
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/0/01/%C4%B0dman_TV_logo.png" group-title="TR",Idman Tv
 https://andro.326503.xyz/checklist/androstreamliveidm.m3u8
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/az/0/04/CBC_Sport_TV_loqo.png" group-title="TR",CBC Sport
