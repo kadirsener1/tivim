@@ -1,5 +1,7 @@
 #EXTM3U
-#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="Spor",BeIN Sports Atom-2
+#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="Spor",BeIN 2 referer
+#EXTVLCOPT:http-user-agent=Mozilla/5.0
+#EXTVLCOPT:https://atomsportv496.top
 https://hlsssssss.amgtmeme.workers.dev/https://corestream.ronaldovurdu.help//hls/bein-sports-2.m3u8
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="Spor",BeIN Sports hit zirve
 https://api.hitnova.net/s/zirve/mono.m3u8
