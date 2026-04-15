@@ -1,6 +1,6 @@
 import requests
+import os
 
-# M3U linkleri (düzeltilmiş raw format)
 m3u_urls = [
     "https://raw.githubusercontent.com/kadirsener1/tivim/main/1.m3u",
     "https://raw.githubusercontent.com/kadirsener1/atom/main/playlist.m3u"
@@ -10,46 +10,68 @@ output_file = "merged.m3u"
 
 def fetch_m3u(url):
     try:
-        response = requests.get(url, timeout=15)
-        response.raise_for_status()
-        return response.text
-    except Exception as e:
-        print(f"Hata ({url}): {e}")
+        r = requests.get(url, timeout=15)
+        r.raise_for_status()
+        return r.text
+    except:
         return ""
 
-def merge_m3u(urls):
-    merged_lines = ["#EXTM3U"]
-    seen = set()
+def parse_m3u(content):
+    channels = []
+    lines = content.splitlines()
 
-    for url in urls:
-        print(f"Çekiliyor: {url}")
+    i = 0
+    while i < len(lines):
+        if lines[i].startswith("#EXTINF"):
+            name = lines[i]
+            if i + 1 < len(lines):
+                url = lines[i + 1].strip()
+                channels.append((name, url))
+            i += 2
+        else:
+            i += 1
+    return channels
+
+def load_existing():
+    if not os.path.exists(output_file):
+        return []
+
+    with open(output_file, "r", encoding="utf-8") as f:
+        return parse_m3u(f.read())
+
+def merge():
+    existing = load_existing()
+    existing_dict = {url: name for name, url in existing}
+
+    new_channels = []
+
+    for url in m3u_urls:
         content = fetch_m3u(url)
-        lines = content.splitlines()
+        new_channels.extend(parse_m3u(content))
 
-        i = 0
-        while i < len(lines):
-            line = lines[i].strip()
+    new_dict = {url: name for name, url in new_channels}
 
-            if line.startswith("#EXTINF"):
-                if i + 1 < len(lines):
-                    stream_url = lines[i + 1].strip()
+    final_list = []
 
-                    # Tekrar eden linkleri engelle
-                    if stream_url not in seen:
-                        merged_lines.append(line)
-                        merged_lines.append(stream_url)
-                        seen.add(stream_url)
+    # 🔥 Eski sıralamayı koru + link güncelle
+    for name, url in existing:
+        if url in new_dict:
+            final_list.append((new_dict[url], url))  # güncel isim
+        else:
+            final_list.append((name, url))  # aynen bırak
 
-                i += 2
-            else:
-                i += 1
+    # ➕ Yeni kanalları sona ekle
+    for url, name in new_dict.items():
+        if url not in existing_dict:
+            final_list.append((name, url))
 
-    return "\n".join(merged_lines)
+    # Dosyaya yaz
+    with open(output_file, "w", encoding="utf-8") as f:
+        f.write("#EXTM3U\n")
+        for name, url in final_list:
+            f.write(f"{name}\n{url}\n")
+
+    print("✅ Sıralama korunarak güncellendi")
 
 if __name__ == "__main__":
-    merged_content = merge_m3u(m3u_urls)
-
-    with open(output_file, "w", encoding="utf-8") as f:
-        f.write(merged_content)
-
-    print("✅ merged.m3u oluşturuldu ve güncellendi")
+    merge()
