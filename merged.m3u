@@ -85,3 +85,5 @@ https://hlsssssss.yesbeits.workers.dev/https://corestream.ronaldovurdu.help//hls
 https://hlsssssss.yesbeits.workers.dev/https://corestream.ronaldovurdu.help//hls/s-sport.m3u8
 #EXTINF:-1 tvg-name="S Sport 2" group-title="Spor",S Sport 2
 https://hlsssssss.yesbeits.workers.dev/https://corestream.ronaldovurdu.help//hls/s-sport-2.m3u8
+#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="TR",beIN Sports 2A
+https://api.hitnova.net/s/bs2/mono.m3u8
