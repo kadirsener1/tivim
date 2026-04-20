@@ -13,7 +13,8 @@ def fetch_m3u(url):
         r = requests.get(url, timeout=15)
         r.raise_for_status()
         return r.text
-    except:
+    except Exception as e:
+        print(f"Hata: {url} okunamadı. Detay: {e}")
         return ""
 
 def parse_m3u(content):
@@ -23,10 +24,10 @@ def parse_m3u(content):
     i = 0
     while i < len(lines):
         if lines[i].startswith("#EXTINF"):
-            name = lines[i]
+            extinf = lines[i]
             if i + 1 < len(lines):
                 url = lines[i + 1].strip()
-                channels.append((name, url))
+                channels.append((extinf, url))
             i += 2
         else:
             i += 1
@@ -39,39 +40,59 @@ def load_existing():
     with open(output_file, "r", encoding="utf-8") as f:
         return parse_m3u(f.read())
 
+# #EXTINF satırından sadece kanal adını (virgülden sonrasını) alır
+def get_clean_name(extinf_line):
+    if "," in extinf_line:
+        return extinf_line.split(",")[-1].strip()
+    return extinf_line.strip()
+
 def merge():
-    existing = load_existing()
-    existing_dict = {url: name for name, url in existing}
-
-    new_channels = []
-
+    existing_channels = load_existing()
+    
+    # Yeni dosyaları indirip kanal adlarına göre sözlüğe alıyoruz
+    new_channels_dict = {}
+    new_channels_order = [] # Yeni kanalların geliş sırasını tutmak için
+    
     for url in m3u_urls:
         content = fetch_m3u(url)
-        new_channels.extend(parse_m3u(content))
-
-    new_dict = {url: name for name, url in new_channels}
+        parsed = parse_m3u(content)
+        for extinf, stream_url in parsed:
+            name = get_clean_name(extinf)
+            if name not in new_channels_dict:
+                new_channels_order.append(name)
+            # Anahtarı kanal ismi yapıyoruz, değeri url yapıyoruz
+            new_channels_dict[name] = (extinf, stream_url)
 
     final_list = []
+    processed_names = set()
 
-    # 🔥 Eski sıralamayı koru + link güncelle
-    for name, url in existing:
-        if url in new_dict:
-            final_list.append((new_dict[url], url))  # güncel isim
+    # 🔥 1. Adım: Eski sıralamayı koru + Eğer link değişmişse linki GÜNCELLE
+    for old_extinf, old_url in existing_channels:
+        name = get_clean_name(old_extinf)
+        
+        if name in new_channels_dict:
+            # Kanal yeni listede var, o zaman YENİ LİNKİ (new_url) al, mevcut ismi (old_extinf) koru.
+            _, new_url = new_channels_dict[name]
+            final_list.append((old_extinf, new_url))
         else:
-            final_list.append((name, url))  # aynen bırak
+            # Kanal yeni listede yoksa, eskisini olduğu gibi bırak
+            final_list.append((old_extinf, old_url))
+            
+        processed_names.add(name)
 
-    # ➕ Yeni kanalları sona ekle
-    for url, name in new_dict.items():
-        if url not in existing_dict:
-            final_list.append((name, url))
+    # ➕ 2. Adım: Yepyeni kanallar gelmişse onları listenin en sonuna ekle
+    for name in new_channels_order:
+        if name not in processed_names:
+            extinf, stream_url = new_channels_dict[name]
+            final_list.append((extinf, stream_url))
 
     # Dosyaya yaz
     with open(output_file, "w", encoding="utf-8") as f:
         f.write("#EXTM3U\n")
-        for name, url in final_list:
-            f.write(f"{name}\n{url}\n")
+        for extinf, url in final_list:
+            f.write(f"{extinf}\n{url}\n")
 
-    print("✅ Sıralama korunarak güncellendi")
+    print("✅ Sıralama korundu, değişen linkler aynı ismin altına güncellendi.")
 
 if __name__ == "__main__":
     merge()
