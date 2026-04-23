@@ -18,8 +18,6 @@ https://ronaldo.magnitude.workers.dev/?url=https://corestream.ronaldovurdu.help/
 #EXTINF:-1 tvg-name="S Sport 2" group-title="Spor",S Sport 2R
 https://ronaldo.magnitude.workers.dev/?url=https://corestream.ronaldovurdu.help//hls/s-sport-2.m3u8
 
-#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="Spor",beIN eonaldo hit
-https://ronaldo.magnitude.workers.dev/?url=https://api.hitnova.net/s/zirve/mono.m3u8
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="Spor",beIN Sports 1A
 https://api.hitnova.net/s/zirve/mono.m3u8
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="Spor",beIN Sports 2A
@@ -54,14 +52,15 @@ https://api.hitnova.net/s/sms2/mono.m3u8
 https://api.hitnova.net/s/eu1/mono.m3u8
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/d/d0/Eurosport_2_Logo_2015.png" group-title="Spor",Eurosport 2A
 https://api.hitnova.net/s/eu2/mono.m3u8
-#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/e/e9/A_Spor_logosu.png" group-title="Spor",A Spor
+#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/e/e9/A_Spor_logosu.png" group-title="Spor",A Spor A
 https://api.hitnova.net/s/as/mono.m3u8
-#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/c/c4/TRT_Spor_kurumsal_logo.png" group-title="Spor",Trt Spor
+#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/c/c4/TRT_Spor_kurumsal_logo.png" group-title="Spor",Trt Spor A
 https://api.hitnova.net/s/trtspor/mono.m3u8
-#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/0/01/%C4%B0dman_TV_logo.png" group-title="Spor",Idman Tv
-https://andro.evrenosoglu53.lat/checklist/androstreamliveidm.m3u8
+#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/0/01/%C4%B0dman_TV_logo.png" group-title="Spor",Idman Tv 
+https://ronaldo.magnitude.workers.dev/?url=https://andro.evrenosoglu53.lat/checklist/androstreamliveidm.m3u8
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/az/0/04/CBC_Sport_TV_loqo.png" group-title="Spor",CBC Sport
-https://andro.evrenosoglu53.lat/checklist/androstreamlivecbcs.m3u8
+https://ronaldo.magnitude.workers.dev/?url=https://andro.evrenosoglu53.lat/checklist/androstreamlivecbcs.m3u8
+
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/6/6c/TRT_1_logo_%282012-2021%29.png" group-title="TR",Trt 1
 https://api.hitnova.net/s/trt1/mono.m3u8
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/6/6c/TRT_1_logo_%282012-2021%29.png" group-title="TR",Trt 1 Yedek
