@@ -1,8 +1,23 @@
 #EXTM3U
-#EXTINF:-1 tvg-id="kanald" group-title="Türkiye", ronaldo WORKERS1
+#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="Spor",beIN Sports 1R
 https://ronaldo.magnitude.workers.dev/?url=https://corestream.ronaldovurdu.help//hls/bein-sports-11.m3u8
-#EXTINF:-1 tvg-id="zirve" tvg-name="Zirve TV" group-title="Canlı TV",Zirve TV
-#EXTVLCOPT=Mozilla/5.0
+#EXTINF:-1 tvg-name="beIN Sports 2" group-title="Spor",beIN Sports 2R
+https://ronaldo.magnitude.workers.dev/?url=https://corestream.ronaldovurdu.help//hls/bein-sports-2.m3u8
+#EXTINF:-1 tvg-name="beIN Sports 3" group-title="Spor",beIN Sports 3R
+https://ronaldo.magnitude.workers.dev/?url=https://corestream.ronaldovurdu.help//hls/bein-sports-3.m3u8
+#EXTINF:-1 tvg-name="beIN Sports 4" group-title="Spor",beIN Sports 4R
+https://ronaldo.magnitude.workers.dev/?url=https://corestream.ronaldovurdu.help//hls/bein-sports-4.m3u8
+#EXTINF:-1 tvg-name="beIN Sports 5" group-title="Spor",beIN Sports 5R
+https://ronaldo.magnitude.workers.dev/?url=https://corestream.ronaldovurdu.help//hls/bein-sports-5.m3u8
+#EXTINF:-1 tvg-name="beIN Sports Max 1" group-title="Spor",beIN Sports Max 1R
+https://ronaldo.magnitude.workers.dev/?url=https://corestream.ronaldovurdu.help//hls/bein-sports-max-1.m3u8
+#EXTINF:-1 tvg-name="beIN Sports Max 2" group-title="Spor",beIN Sports Max 2R
+https://ronaldo.magnitude.workers.dev/?url=https://corestream.ronaldovurdu.help//hls/bein-sports-max-2.m3u8
+#EXTINF:-1 tvg-name="S Sport" group-title="Spor",S Sport R
+https://ronaldo.magnitude.workers.dev/?url=https://corestream.ronaldovurdu.help//hls/s-sport.m3u8
+#EXTINF:-1 tvg-name="S Sport 2" group-title="Spor",S Sport 2R
+https://ronaldo.magnitude.workers.dev/?url=https://corestream.ronaldovurdu.help//hls/s-sport-2.m3u8
+
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="Spor",beIN eonaldo hit
 https://ronaldo.magnitude.workers.dev/?url=https://api.hitnova.net/s/zirve/mono.m3u8
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="Spor",beIN Sports 1A
@@ -85,6 +100,7 @@ http://live.tabitv.workers.dev/?ID=tabii%20TV
 https://tv.ensonhaber.com/haberglobal/haberglobal_720p.m3u8
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/2/23/TRT_%C3%A7ocuk_logo.png" group-title="TR",Trt Cocuk
 https://tv-trtcocuk.medya.trt.com.tr/master_1080.m3u8
+
 #EXTINF:-1 tvg-name="beIN Sports 1" group-title="Spor",beIN Sports 1
 https://hlsssssss.neymardacorona.workers.dev/https://corestream.ronaldovurdu.help//hls/bein-sports-11.m3u8
 #EXTINF:-1 tvg-name="beIN Sports 2" group-title="Spor",beIN Sports 2
