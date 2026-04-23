@@ -1,8 +1,12 @@
 #EXTM3U
 #EXTINF:-1 tvg-id="kanald" group-title="Türkiye", ronaldo WORKERS1
 https://ronaldo.magnitude.workers.dev/?url=https://corestream.ronaldovurdu.help//hls/bein-sports-11.m3u8
-#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="Spor",beIN ronaldo zirve
-https://ronaldo.magnitude.workers.dev/?url=https://3d7.d72577a9dd0ec59.cfd/b2/mono.m3u8
+#EXTINF:-1 tvg-id="zirve" tvg-name="Zirve TV" group-title="Canlı TV",Zirve TV
+#EXTVLCOPT=Mozilla/5.0
+#EXTVLCOPT=https://api.hitnova.net/
+#EXTVLCOPT=https://api.hitnova.net
+https://api.hitnova.net/s/zirve/mono.m3u8
+
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="Spor",beIN eonaldo hit
 https://ronaldo.magnitude.workers.dev/?url=https://api.hitnova.net/s/zirve/mono.m3u8
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="Spor",beIN Sports 1A
