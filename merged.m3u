@@ -55,10 +55,7 @@ https://api.hitnova.net/s/eu2/mono.m3u8
 https://api.hitnova.net/s/as/mono.m3u8
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/c/c4/TRT_Spor_kurumsal_logo.png" group-title="Spor",Trt Spor A
 https://api.hitnova.net/s/trtspor/mono.m3u8
-#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/0/01/%C4%B0dman_TV_logo.png" group-title="Spor",Idman Tv 
-https://andro.evrenosoglu53.lat/checklist/androstreamliveidm.m3u8
-#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/az/0/04/CBC_Sport_TV_loqo.png" group-title="Spor",CBC Sport
-https://andro.evrenosoglu53.lat/checklist/androstreamlivecbcs.m3u8
+
 #EXTINF:-1 tvg-id="androstreamlivebs1" tvg-name="BeIN Sports 1 HD" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Bein_sports_1.png/220px-Bein_sports_1.png" group-title="Spor",BeIN Sports 1B
 https://ronaldo.magnitude.workers.dev/?url=https://andro.evrenosoglu53.lat/checklist/receptestt.m3u8
 #EXTINF:-1 tvg-id="androstreamlivebs2" tvg-name="BeIN Sports 2 HD" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Bein_sports_2.png/220px-Bein_sports_2.png" group-title="Spor",BeIN Sports 2B
@@ -97,6 +94,10 @@ https://ronaldo.magnitude.workers.dev/?url=https://andro.evrenosoglu53.lat/check
 https://ronaldo.magnitude.workers.dev/?url=https://andro.evrenosoglu53.lat/checklist/facebooklivees2.m3u8
 #EXTINF:-1 tvg-id="androstreamlivetrts" tvg-name="TRT Spor HD" tvg-logo="https://upload.wikimedia.org/wikipedia/tr/thumb/f/f8/TRT_Spor_logo_%282022%29.svg/220px-TRT_Spor_logo_%282022%29.svg.png" group-title="Spor",TRT Spor B
 https://ronaldo.magnitude.workers.dev/?url=https://andro.evrenosoglu53.lat/checklist/facebooklivetrts.m3u8
+#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/0/01/%C4%B0dman_TV_logo.png" group-title="Spor",Idman Tv B
+https://ronaldo.magnitude.workers.dev/?url=https://andro.evrenosoglu53.lat/checklist/androstreamliveidm.m3u8
+#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/az/0/04/CBC_Sport_TV_loqo.png" group-title="Spor",CBC Sport B
+https://ronaldo.magnitude.workers.dev/?url=https://andro.evrenosoglu53.lat/checklist/androstreamlivecbcs.m3u8
 #EXTINF:-1 tvg-id="androstreamlivetrtsy" tvg-name="TRT Spor Yıldız" tvg-logo="" group-title="Spor",TRT Spor Yıldız B
 https://ronaldo.magnitude.workers.dev/?url=https://andro.evrenosoglu53.lat/checklist/facebooklivetrtsy.m3u8
 #EXTINF:-1 tvg-id="androstreamlivegs" tvg-name="GS TV" tvg-logo="" group-title="Spor",GS TV B
