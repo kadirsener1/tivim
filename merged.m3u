@@ -1,8 +1,8 @@
 #EXTM3U
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="Spor",beIN Sports 1R
 https://ronaldo.magnitude.workers.dev/?url=https://corestream.ronaldovurdu.help//hls/bein-sports-11.m3u8
-#EXTINF:-1 tvg-name="beIN Sports 2" group-title="Spor",beIN Sports zeko api
-https://api.codetabs.com/v1/proxy/?quest=https://chevy.tigertestxtg.sbs/proxy/zeko/premium62/mono.m3u8
+#EXTINF:-1 tvg-name="beIN Sports 2" group-title="Spor",beIN Sports zeko hls
+https://chevy.tigertestxtg.sbs/proxy/zeko/premium62/mono.m3u8
 #EXTINF:-1 tvg-name="beIN Sports 2" group-title="Spor",beIN Sports zeko ronaldo
 https://ronaldo.magnitude.workers.dev/?url=https://chevy.tigertestxtg.sbs/proxy/zeko/premium62/mono.m3u8
 #EXTINF:-1 tvg-name="beIN Sports 2" group-title="Spor",beIN Sports 2R
