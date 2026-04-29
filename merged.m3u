@@ -1,6 +1,6 @@
 #EXTM3U
-#EXTINF:-1 tvg-name="" group-title="WS-247",bein cdn
-https://edge.cdnlivetv.ru/secure/api/v1/tr-bein-sports-2/playlist.m3u8?token=14d692400d8f2c469f61694b991535795548d88f6925a5dc383dd776d1aa2bde.1777495545.8f2ec03a376068dd03f8bdb86622e557.a04cdb2022a8cf556b53605bdce67954.113cda559084b6b63aeaf6dd25cd7660&signature=18121697dd60bb5e6b2cee17c42581083a241279f9d03d457c201b3bb0f933e4
+#EXTINF:-1 tvg-name="" group-title="WS-247",bein zip
+https://zhdcdn3.zip/live/STf97ec046a49fc76.m3u8
 #EXTINF:-1 tvg-name="" group-title="WS-247",Arena Sport 1 Premium-RS
 https://playlist.cfbu247.sbs/?url=aHR0cHMlM0ElMkYlMkZjaGV2eS5zb3lzcGFjZS5jeW91JTJGcHJveHklMkZ3aW5kJTJGcHJlbWl1bTEzNCUyRm1vbm8ubTN1OCUyNmRhdGElM0RUM0pwWjJsdVBXaDBkSEJ6T2k4dlpYQnBZM0JzWVhsd2JHRjVMbU5tWkElM0QlM0Q&headers=eyJSZWZlcmVyIjoiaHR0cHM6Ly9lcGljcGxheXBsYXkuY2ZkLyJ9
 #EXTINF:-1 tvg-name="" group-title="WS-247",Arena Sport 2 Premium-RS
