@@ -720,7 +720,7 @@
           <div class="idle-txt">İZLEMEK İÇİN KANAL SEÇİN</div>
         </div>
 
-        <video id="video" controls playsinline></video>
+      
 
      
       </div>
@@ -734,12 +734,14 @@
             <div class="np-group" id="npGroup">Bir kanal seçin</div>
           </div>
         </div>
-   <div class="fs-hint">
-          <button class="fs-btn" onclick="openFS()">⛶ TAM EKRAN</button>
-        </div>
+        
 
         <div class="ctrl-btns">
           <div class="vol-wrap">
+              <video id="video" controls playsinline></video>
+   <div class="fs-hint">
+          <button class="fs-btn" onclick="openFS()">⛶ TAM EKRAN</button>
+        </div>
             <span style="font-size:14px">🔊</span>
             <input type="range" class="vol-sl" min="0" max="100" value="90" oninput="setVol(this.value)">
           </div>
