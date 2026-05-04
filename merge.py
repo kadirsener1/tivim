@@ -2,8 +2,9 @@ import requests
 import os
 
 m3u_urls = [
-    "https://raw.githubusercontent.com/kadirsener1/tivim/main/1.m3u",
-    "https://raw.githubusercontent.com/kadirsener1/selcuk/refs/heads/main/5.m3u"
+    "https://raw.githubusercontent.com/kadirsener1/tivim/main/m3u/hit.m3u",
+     "https://raw.githubusercontent.com/kadirsener1/tivim/main/m3u/ulusal.m3u",
+    "https://raw.githubusercontent.com/kadirsener1/selcuk/main/5.m3u"
 ]
 
 output_file = "merged.m3u"
