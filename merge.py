@@ -1,8 +1,9 @@
 import requests
 import re
+import os
 
-# Güncellenecek kaynak linkler
-urls = [
+# Kaynak M3U URL'leri
+SOURCE_URLS = [
     "https://raw.githubusercontent.com/kadirsener1/tivim/refs/heads/main/m3u/hit.m3u",
     "https://raw.githubusercontent.com/kadirsener1/tivim/refs/heads/main/m3u/ss.m3u",
     "https://raw.githubusercontent.com/kadirsener1/tivim/refs/heads/main/m3u/cafe.m3u",
@@ -10,169 +11,116 @@ urls = [
     "https://raw.githubusercontent.com/kadirsener1/tivim/refs/heads/main/m3u/cocuk.m3u",
 ]
 
-def get_channel_name(extinf_line):
-    """EXTINF satırından kanal adını çıkar"""
-    match = re.search(r',\s*(.+)$', extinf_line)
-    return match.group(1).strip().lower() if match else None
-
-def parse_source_m3u(content):
-    """Kaynak dosyalardan kanal adı -> (meta_lines, url) eşleştirmesi"""
-    channels = {}
-    lines = content.strip().splitlines()
-    i = 0
-    while i < len(lines):
-        line = lines[i].strip()
-        if line.startswith("#EXTINF"):
-            channel_name = get_channel_name(line)
-            meta_lines = [line]
-            i += 1
-            # EXTVLCOPT ve diğer # ile başlayan satırlar
-            while i < len(lines) and lines[i].strip().startswith("#"):
-                meta_lines.append(lines[i].strip())
-                i += 1
-            # URL satırı
-            url = lines[i].strip() if i < len(lines) and not lines[i].strip().startswith("#") else ""
-            if channel_name and url:
-                channels[channel_name] = {
-                    "meta": meta_lines,
-                    "url": url
-                }
-            i += 1
+def m3u_parse(content):
+    """M3U içeriğini kanal listesine parse eder. Her kanal: isim, metadata (tüm # satırları), link"""
+    channels = []
+    current_meta = []
+    for line in content.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        if line.startswith('#EXTINF'):
+            # Yeni kanal başlangıcı
+            current_meta = [line]
+        elif line.startswith('#'):
+            # Mevcut kanalın metadata satırı (EXTVLCOPT dahil)
+            if current_meta:
+                current_meta.append(line)
         else:
-            i += 1
+            # Yayın linki satırı
+            if current_meta:
+                # Kanal adını EXTINF satırından al (virgülden sonraki kısım)
+                extinf_line = current_meta[0]
+                name_match = re.search(r',(.+)$', extinf_line)
+                channel_name = name_match.group(1).strip() if name_match else extinf_line.strip()
+                channels.append({
+                    'name': channel_name,
+                    'meta': current_meta.copy(),
+                    'url': line
+                })
+                current_meta = []
     return channels
 
-def update_merged_m3u(merged_path, source_channels):
-    """merged.m3u dosyasını oku, sıralamayı koru, sadece linkleri güncelle"""
-    with open(merged_path, "r", encoding="utf-8") as f:
-        lines = f.readlines()
-    
-    new_lines = []
-    i = 0
-    updated_count = 0
-    
-    while i < len(lines):
-        line = lines[i]
-        
-        if line.strip().startswith("#EXTINF"):
-            channel_name = get_channel_name(line.strip())
-            
-            # EXTINF satırını ekle (orijinal haliyle - isim ve logo korunur)
-            new_lines.append(line)
-            i += 1
-            
-            # Mevcut meta satırlarını atla, sonra URL'yi bul
-            old_meta = []
-            while i < len(lines) and lines[i].strip().startswith("#"):
-                old_meta.append(lines[i])
-                i += 1
-            
-            # Eski URL satırı
-            old_url = lines[i] if i < len(lines) else ""
-            
-            # Kaynaklarda bu kanal var mı?
-            if channel_name and channel_name in source_channels:
-                source = source_channels[channel_name]
-                # Yeni meta satırlarını ekle (EXTVLCOPT vs.)
-                for meta in source["meta"][1:]:  # İlk satır EXTINF, onu zaten ekledik
-                    new_lines.append(meta + "\n")
-                # Yeni URL'yi ekle
-                new_lines.append(source["url"] + "\n")
-                if source["url"].strip() != old_url.strip():
+def main():
+    merged_path = 'merged.m3u'
+
+    if os.path.exists(merged_path):
+        # MEVCUT merged.m3u VAR: Sıralamayı koru, sadece link güncelle
+        print(f"Mevcut {merged_path} bulundu. Sıralama korunuyor, sadece linkler güncelleniyor...")
+        with open(merged_path, 'r', encoding='utf-8') as f:
+            existing_content = f.read()
+        existing_channels = m3u_parse(existing_content)
+        print(f"Mevcut {len(existing_channels)} kanal yüklendi.")
+
+        # Kaynaklardan kanal adı -> link sözlüğü oluştur
+        source_links = {}
+        for url in SOURCE_URLS:
+            print(f"Kaynak çekiliyor: {url}")
+            try:
+                resp = requests.get(url, timeout=15)
+                resp.raise_for_status()
+                channels = m3u_parse(resp.text)
+                for ch in channels:
+                    # Aynı kanal birden fazla kaynakta varsa son linki al
+                    source_links[ch['name']] = ch['url']
+                print(f"  {len(channels)} kanal tarandı.")
+            except Exception as e:
+                print(f"  HATA: {e}")
+
+        # Mevcut kanalların sadece linklerini güncelle (diğer her şey sabit kalır)
+        updated_count = 0
+        for ch in existing_channels:
+            if ch['name'] in source_links:
+                new_url = source_links[ch['name']]
+                if ch['url'] != new_url:
+                    ch['url'] = new_url
                     updated_count += 1
-                    print(f"✓ Güncellendi: {channel_name}")
-            else:
-                # Kaynaklarda yok, orijinal meta ve URL'yi koru
-                for meta in old_meta:
-                    new_lines.append(meta)
-                new_lines.append(old_url)
-            
-            i += 1
-        else:
-            new_lines.append(line)
-            i += 1
-    
-    # Dosyayı güncelle
-    with open(merged_path, "w", encoding="utf-8") as f:
-        f.writelines(new_lines)
-    
-    return updated_count
 
-# Ana işlem
-print("="*50)
-print("MERGED.M3U LINK GÜNCELLEME")
-print("="*50)
+        # Güncellenmiş dosyayı yaz
+        with open(merged_path, 'w', encoding='utf-8') as f:
+            f.write('#EXTM3U\n')
+            for ch in existing_channels:
+                for meta_line in ch['meta']:
+                    f.write(meta_line + '\n')
+                f.write(ch['url'] + '\n')
 
-# 1. Tüm kaynak dosyaları indir ve parse et
-all_source_channels = {}
+        print(f"✅ İşlem tamamlandı. {updated_count} kanalın linki güncellendi. Toplam {len(existing_channels)} kanal kaydedildi.")
 
-for url in urls:
-    print(f"\n📥 İndiriliyor: {url.split('/')[-1]}")
-    try:
-        resp = requests.get(url, timeout=15)
-        resp.raise_for_status()
-        channels = parse_source_m3u(resp.text)
-        print(f"   {len(channels)} kanal bulundu")
-        # Sonraki dosyalar önceki linkleri override eder
-        all_source_channels.update(channels)
-    except Exception as e:
-        print(f"   ❌ HATA: {e}")
+    else:
+        # merged.m3u YOK: Kaynakları birleştir, tüm içeriği koru
+        print(f"{merged_path} bulunamadı. Kaynaklar birleştiriliyor...")
+        all_channels = []
+        seen_channels = {}  # kanal adı -> listedeki indexi
 
-print(f"\n📊 Toplam {len(all_source_channels)} benzersiz kanal kaynaklardan alındı")
+        for url in SOURCE_URLS:
+            print(f"Kaynak çekiliyor: {url}")
+            try:
+                resp = requests.get(url, timeout=15)
+                resp.raise_for_status()
+                channels = m3u_parse(resp.text)
+                print(f"  {len(channels)} kanal bulundu.")
+                for ch in channels:
+                    name = ch['name']
+                    if name not in seen_channels:
+                        # İlk kez görülen kanalı ekle
+                        all_channels.append(ch)
+                        seen_channels[name] = len(all_channels) - 1
+                    else:
+                        # Mevcut kanalın sadece linkini güncelle
+                        idx = seen_channels[name]
+                        all_channels[idx]['url'] = ch['url']
+            except Exception as e:
+                print(f"  HATA: {e}")
 
-# 2. merged.m3u dosyasını güncelle
-print("\n" + "="*50)
-print("GÜNCELLEME BAŞLIYOR...")
-print("="*50)
+        # Dosyayı yaz
+        with open(merged_path, 'w', encoding='utf-8') as f:
+            f.write('#EXTM3U\n')
+            for ch in all_channels:
+                for meta_line in ch['meta']:
+                    f.write(meta_line + '\n')
+                f.write(ch['url'] + '\n')
 
-try:
-    updated = update_merged_m3u("merged.m3u", all_source_channels)
-    print(f"\n✅ TAMAMLANDI!")
-    print(f"   {updated} kanal linki güncellendi")
-    print(f"   Dosya: merged.m3u")
-except FileNotFoundError:
-    print("\n❌ HATA: merged.m3u dosyası bulunamadı!")
-    print("   Bu scripti merged.m3u ile aynı klasörde çalıştırın.")
-except Exception as e:
-    print(f"\n❌ HATA: {e}")            else:
-                channels[channel_name] = {
-                    "meta": meta_lines,
-                    "url": url
-                }
-                order.append(channel_name)
-            i += 1
-        else:
-            i += 1
-    return channels, order
+        print(f"✅ İşlem tamamlandı. Toplam {len(all_channels)} kanal birleştirildi, tekrar edenler ayıklandı.")
 
-all_channels = {}
-all_order = []
-
-for url in urls:
-    print(f"Fetching: {url}")
-    try:
-        resp = requests.get(url, timeout=15)
-        resp.raise_for_status()
-        content = resp.text
-        channels, order = parse_m3u(content)
-        
-        for name in order:
-            if name in all_channels:
-                # Sadece URL güncelle
-                all_channels[name]["url"] = channels[name]["url"]
-            else:
-                all_channels[name] = channels[name]
-                all_order.append(name)
-    except Exception as e:
-        print(f"  HATA: {e}")
-
-# merged.m3u yaz
-with open("merged.m3u", "w", encoding="utf-8") as f:
-    f.write("#EXTM3U\n\n")
-    for name in all_order:
-        ch = all_channels[name]
-        for meta in ch["meta"]:
-            f.write(meta + "\n")
-        f.write(ch["url"] + "\n\n")
-
-print(f"\nToplam {len(all_order)} kanal merged.m3u dosyasına yazıldı.")
+if __name__ == '__main__':
+    main()
