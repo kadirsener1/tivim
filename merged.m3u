@@ -37,9 +37,11 @@ https://ronaldo.magnitude.workers.dev/?url=https://corestream.ronaldovurdu.help/
 https://ronaldo.magnitude.workers.dev/?url=https://corestream.ronaldovurdu.help//hls/s-sport.m3u8
 #EXTINF:-1 group-title="Spor",S Sport 2-R
 https://ronaldo.magnitude.workers.dev/?url=https://corestream.ronaldovurdu.help//hls/s-sport-2.m3u8
-#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="Spor",beIN Sports 2-HİT
+#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="Spor",beIN Sports 2-HİT refe
+#EXTVLCOPT:http-referrer= https://www.hitv.fun
 https://api.hitnova.net/s/b2/mono.m3u8
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="Spor",beIN Sports 3-HİT
+#EXTVLCOPT:http-referrer= https://www.hitv.fun
 https://api.hitnova.net/s/b3/mono.m3u8
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="Spor",beIN Sports 4-HİT
 https://api.hitnova.net/s/b4/mono.m3u8
