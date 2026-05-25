@@ -34,5 +34,4 @@ https://api.hitnova.net/s/sms2/mono.m3u8
 https://api.hitnova.net/s/eu1/mono.m3u8
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/d/d0/Eurosport_2_Logo_2015.png" group-title="Spor",Eurosport 2-HİT
 https://api.hitnova.net/s/eu2/mono.m3u8
-#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/e/e9/A_Spor_logosu.png" group-title="Spor",A Spor-HİT
-https://api.hitnova.net/s/as/mono.m3u8
+
