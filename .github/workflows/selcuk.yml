@@ -17,10 +17,10 @@ jobs:
       - name: Depoyu Klonla
         uses: actions/checkout@v4.2.2
         
-      - name: Python 3.11.8 Yükle
+      - name: Python Yükle
         uses: actions/setup-python@v5.3.0
         with:
-          python-version: 3.11.8
+          python-version: '3.11'          # ✅ Düzeltildi
           
       - name: Gereksinimleri Kur
         run: |
@@ -30,7 +30,6 @@ jobs:
       - name: selcuk.py Çalıştır
         run: python selcuk.py
 
-      
       - name: Değişiklik Kontrolü
         id: degisiklik_kontrol
         run: |
