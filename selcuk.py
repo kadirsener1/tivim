@@ -2,7 +2,7 @@ import requests
 import re
 import os
 
-def find_working_selcuksportshd(start=1825, end=1950):
+def find_working_selcuksportshd(start=1825, end=2500):
     print("🧭 selcuksportshd domainleri taranıyor...")
     headers = {"User-Agent": "Mozilla/5.0"}
 
